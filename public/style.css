@@ -176,7 +176,7 @@ button:active { transform: scale(0.95); }
         color: #999 !important;
         font-size: 15px !important;
         display: block !important;
-        z-index: 10 !important; /* ★ここが最重要：文字を一番手前に出す */
+        z-index: 999 !important; /* ★ここが最重要：文字を一番手前に出す */
     }
 
     /* 日付が選ばれたらガイドを消して、文字色を黒(日付)に戻す */
