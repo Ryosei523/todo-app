@@ -1,14 +1,165 @@
-:root { --bg: #ffffff; --text: #000000; --card: #f8f9fa; }
-[data-theme="dark"] { --bg: #000000; --text: #ffffff; --card: #1a1a1a; }
+/* --- 1. テーマ変数（白黒切り替え） --- */
+:root {
+    --bg: #ffffff;
+    --text: #000000;
+    --card: #f8f9fa;
+    --border: #dddddd;
+    --accent: #000000;
+}
 
-body { background-color: var(--bg); color: var(--text); transition: 0.3s; font-family: sans-serif; }
-.container { max-width: 500px; margin: 40px auto; padding: 20px; }
-.card { background: var(--card); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ddd; }
-input, select, button { width: 100%; height: 45px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd; background: var(--bg); color: var(--text); }
-button { background: var(--text); color: var(--bg); border: none; font-weight: bold; cursor: pointer; }
-.task-item { background: var(--card); padding: 15px; margin-bottom: 10px; border-radius: 8px; cursor: grab; display: flex; align-items: center; justify-content: space-between; border: 1px solid #ddd; }
+[data-theme="dark"] {
+    --bg: #000000;
+    --text: #ffffff;
+    --card: #1a1a1a;
+    --border: #333333;
+    --accent: #ffffff;
+}
+
+/* --- 2. 全体設定 --- */
+body { 
+    background-color: var(--bg); 
+    color: var(--text); 
+    transition: background-color 0.3s, color 0.3s; 
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+}
+
+.container { 
+    max-width: 500px; 
+    margin: 40px auto; 
+    padding: 20px; 
+}
+
+.hidden { display: none !important; }
+
+/* --- 3. ヘッダー（To Doとボタンの横並び） --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: -1px;
+}
+
+.header-right {
+    display: flex;
+    gap: 10px;
+}
+
+/* ヘッダー内ボタンのスリム化 */
+.header-right button {
+    width: auto !important;
+    height: 36px !important;
+    padding: 0 15px !important;
+    font-size: 13px !important;
+    margin: 0 !important;
+}
+
+/* --- 4. フォーム要素（入力欄の大型化） --- */
+input, select, button { 
+    width: 100%; 
+    height: 48px; 
+    margin-bottom: 12px; 
+    border-radius: 10px; 
+    border: 1px solid var(--border); 
+    background: var(--bg); 
+    color: var(--text); 
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* カテゴリと日付を特に大きく強調 */
+#new-task-category, 
+#new-task-date {
+    height: 65px !important; 
+    font-size: 18px !important;
+    font-weight: bold;
+    padding: 0 20px;
+    border: 2px solid var(--border); /* 少し太くして存在感を出す */
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+button { 
+    background: var(--text); 
+    color: var(--bg); 
+    border: none; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: transform 0.1s;
+}
+
+button:active { transform: scale(0.98); }
+
+/* --- 5. タスクリスト（ドラッグ対応） --- */
+.card { 
+    background: var(--card); 
+    padding: 20px; 
+    border-radius: 16px; 
+    margin-bottom: 20px; 
+    border: 1px solid var(--border); 
+}
+
+.task-item { 
+    background: var(--card); 
+    padding: 16px; 
+    margin-bottom: 12px; 
+    border-radius: 12px; 
+    border: 1px solid var(--border);
+    cursor: grab; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px;
+}
+
 .task-item:active { cursor: grabbing; }
+
+.task-top-row { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+}
+
+.task-bottom-row { 
+    display: flex; 
+    justify-content: flex-end; 
+    gap: 8px; 
+}
+
+/* 編集・削除ボタンはスリムに */
+.edit-btn, .delete-btn {
+    width: auto;
+    height: 32px;
+    padding: 0 12px;
+    font-size: 12px;
+}
+
+/* --- 6. その他・ユーティリティ --- */
 .sortable-ghost { opacity: 0.2; }
-.progress-container { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; }
-.progress-fill { background: #28a745; height: 100%; transition: width 0.5s; }
-.hidden { display: none !important; } /* これで auth と app を切り替えます */
+
+.progress-container { 
+    background: var(--border); 
+    height: 10px; 
+    border-radius: 5px; 
+    overflow: hidden; 
+}
+
+.progress-fill { 
+    background: #28a745; 
+    height: 100%; 
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+
+.task-item.completed .task-title {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
