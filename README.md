@@ -1,5 +1,7 @@
 # Task Manager (Todo App)
 
+## 🚀 Live Demo
+[https://todo-app-gjnm.onrender.com](https://todo-app-gjnm.onrender.com)
 ## 1. プロジェクト概要
 日常のタスク管理を効率化し、達成感を視覚化することを目的としたWebアプリケーションです。
 単なるメモ帳ではなく、「データの正規化」や「ユーザーのUX（利用体験）」にこだわって開発しました。
