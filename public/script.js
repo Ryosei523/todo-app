@@ -201,8 +201,8 @@ function renderTasks(tasks) {
                 </span>
                 <small class="task-meta">
                     ${priorityLabel}
-                    ${dateStr ? ` 📅${dateStr}` : ''}
-                    ${task.category_name ? ` <span class="cat-tag">🏷️${task.category_name}</span>` : ''}
+                    ${dateStr ? ` ${dateStr}` : ''}
+                    ${task.category_name ? ` <span class="cat-tag">${task.category_name}</span>` : ''}
                 </small>
             </div>
             <div class="task-bottom-row">
@@ -215,9 +215,9 @@ function renderTasks(tasks) {
 }
 
 function getPriorityLabel(p) {
-    if (p === 'high') return '<span>🔥 高</span>';
-    if (p === 'medium') return '<span>⚡ 中</span>';
-    return '<span>🌱 低</span>';
+    if (p === 'high') return '<span> 高</span>';
+    if (p === 'medium') return '<span> 中</span>';
+    return '<span> 低</span>';
 }
 
 // --- リマインダー・追加・更新・削除 ---
