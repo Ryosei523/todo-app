@@ -28,7 +28,7 @@ const db = mysql.createConnection({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     port: process.env.DB_PORT || 3306,
-    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
+    ssl: { rejectUnauthorized: false } 
 });
 
 // --- データベース初期化（カラムの自動追加） ---
