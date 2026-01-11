@@ -1,10 +1,10 @@
 body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f2f5; color: #333; margin: 0; }
-.container { max-width: 600px; margin: 40px auto; padding: 20px; } /* 少し幅を広げました */
+.container { max-width: 600px; margin: 40px auto; padding: 20px; }
 .hidden { display: none; }
 
 .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 20px; }
 
-/* フォーム要素の基本設定（チェックボックスを除外するように修正） */
+/* フォーム要素の基本設定 */
 input[type="text"], 
 input[type="password"], 
 input[type="date"], 
@@ -23,10 +23,17 @@ header h1 { margin: 0; font-size: 24px; color: #1a1a1a; }
 
 /* タスク入力エリア */
 .task-input-card { display: flex; flex-direction: column; gap: 10px; }
-.input-options { display: flex; gap: 10px; }
-.input-options input, .input-options select { margin: 0; flex: 1; }
 
-/* --- タスク一覧のレイアウト改善 --- */
+/* 入力オプション（カテゴリ、日付、優先度）の横並び設定 */
+.input-options { 
+    display: flex; 
+    gap: 10px; 
+    align-items: center; 
+    flex-wrap: nowrap; /* 折り返しを禁止して1行に強制 */
+}
+.input-options input, .input-options select { margin: 0; flex: 1; min-width: 0; } /* min-width: 0 が1行に収めるコツ */
+
+/* --- タスク一覧のレイアウト --- */
 #task-list { list-style: none; padding: 0; }
 .task-item { 
     background: white; 
@@ -39,170 +46,87 @@ header h1 { margin: 0; font-size: 24px; color: #1a1a1a; }
     box-shadow: 0 2px 8px rgba(0,0,0,0.06); 
     border-left: 6px solid #ddd;
     animation: fadeIn 0.3s ease-out;
-    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.task-item:hover {
-    transform: translateX(4px); /* 少し右にずれる演出 */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.task-left { 
-    display: flex; 
-    align-items: center; 
-    gap: 18px; 
-    flex-grow: 1; /* ここが大部分を占めるように設定 */
-}
-
-/* チェックボックスのサイズを固定 */
-.task-left input[type="checkbox"] { 
-    width: 22px; 
-    height: 22px; 
-    flex-shrink: 0; /* 圧縮されないように固定 */
-    cursor: pointer;
-}
-
-/* タスク詳細テキストを中央に配置 */
-.task-info { 
-    display: flex; 
-    flex-direction: column; 
-    flex-grow: 1; 
-}
+.task-left { display: flex; align-items: center; gap: 18px; flex-grow: 1; }
+.task-left input[type="checkbox"] { width: 22px; height: 22px; flex-shrink: 0; cursor: pointer; }
+.task-info { display: flex; flex-direction: column; flex-grow: 1; }
 .task-title { font-size: 17px; font-weight: bold; color: #1a1a1a; }
 .task-meta { color: #777; font-size: 13px; margin-top: 5px; display: flex; align-items: center; gap: 12px; }
 
-/* 優先度タグの装飾 */
-.task-meta span {
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-size: 11px;
-    background: #f8f9fa;
-    border: 1px solid #eee;
-}
+.task-meta span { padding: 2px 8px; border-radius: 6px; font-size: 11px; background: #f8f9fa; border: 1px solid #eee; }
 
-/* 右側の操作ボタン */
-.task-right { 
-    display: flex; 
-    gap: 8px; 
-    flex-shrink: 0; 
-    margin-left: 15px;
-}
-
+.task-right { display: flex; gap: 8px; flex-shrink: 0; margin-left: 15px; }
 .edit-btn { background: #f0f2f5; color: #555; padding: 6px 12px; font-size: 12px; border: 1px solid #ddd; }
 .delete-btn { background: none; color: #bbb; border: 1px solid #eee; padding: 6px 10px; border-radius: 5px; font-size: 14px; }
-.delete-btn:hover { background: #ff4d4d; color: white; border-color: #ff4d4d; }
 
-/* 優先度別のボーダー色 */
 .task-item.priority-high { border-left-color: #ff4d4d; }
 .task-item.priority-medium { border-left-color: #ffc107; }
 .task-item.priority-low { border-left-color: #28a745; }
-
-/* 完了済みタスクのスタイル */
 .task-item.completed { opacity: 0.6; background: #fcfcfc; border-left-color: #ccc; }
 .task-item.completed .task-title { text-decoration: line-through; color: #999; }
 
-/* --- 統計バーと進捗 --- */
+/* 統計・進捗 */
 .stats-bar { padding: 15px 25px; margin-bottom: 25px; }
 .stats-info { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; font-weight: bold; color: #666; }
 .progress-container { background: #eef0f2; height: 10px; border-radius: 5px; overflow: hidden; }
 .progress-fill { height: 100%; background: linear-gradient(90deg, #28a745, #5cd65c); width: 0%; transition: width 0.5s ease; }
 
-/* モーダル（編集画面） */
-.modal {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000;
-}
-.modal.hidden { display: none; }
-.modal-content { width: 90%; max-width: 400px; animation: modalIn 0.3s ease-out; }
-.modal-buttons { 
-    display: flex; 
-    gap: 15px;       /* ボタン間の隙間を少し広げる */
-    margin-top: 25px; /* 上の余白も少し広げてバランスを取る */
-}
+/* モーダル */
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+.modal-content { width: 90%; max-width: 400px; }
+.modal-buttons { display: flex; gap: 15px; margin-top: 25px; }
+.modal-buttons button { flex: 1; padding: 12px; }
 
-/* モーダル内のボタンの幅を均等にする */
-.modal-buttons button {
-    flex: 1;         /* 利用可能な幅を等分して広げる */
-    padding: 12px;   /* 内側の余白も確保 */
-}
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes modalIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-/* タブのスタイル */
+/* タブ */
 .filter-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
 .tab-btn { flex: 1; padding: 10px; background: #e9ecef; color: #555; border-radius: 8px; font-size: 14px; }
 .tab-btn.active { background: #007bff; color: white; }
 
-/* 期限切れの強調スタイル */
-.task-item.overdue { border-left-color: #ff4d4d !important; background: #fff8f8; }
-.overdue-badge { 
-    background: #ff4d4d; color: white; padding: 2px 6px; border-radius: 4px; 
-    font-size: 10px; margin-left: 8px; font-weight: bold; 
-}
+/* カテゴリタグとボタン */
+.add-cat-btn { width: 40px !important; height: 40px; padding: 0 !important; background: #6c757d; color: white; font-size: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin: 0 !important; }
+.cat-tag { background: #e2e8f0; color: #4a5568; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 
-/* レスポンシブ対応（スマホ表示） */
+/* --- レスポンシブ対応（スマホ表示の修正） --- */
 @media (max-width: 480px) {
     .container { margin: 10px auto; padding: 10px; width: 95%; }
-    .input-options { flex-direction: column; gap: 0; }
-    .task-item { flex-direction: column; align-items: flex-start; gap: 12px; }
-    .task-right { width: 100%; justify-content: flex-end; border-top: 1px solid #eee; padding-top: 10px; }
+    
+    /* ヘッダーを縦に並べて中央揃えに */
+    header { flex-direction: column; gap: 10px; text-align: center; }
+
+    /* ★ここがポイント：入力オプションを横並びで維持 */
+    .input-options {
+        flex-direction: row !important; /* 横並びを強制 */
+        flex-wrap: nowrap !important;  /* 折り返しさせない */
+        gap: 5px !important;           /* 隙間を狭くする */
+    }
+
+    /* 各要素のサイズを小さくして1行に詰め込む */
+    .input-options select, 
+    .input-options input[type="date"] {
+        padding: 8px 4px !important;
+        font-size: 12px !important;
+        min-width: 0 !important; /* 要素が縮小できるようにする */
+    }
+
+    /* ＋ボタンも少し小さく */
+    .add-cat-btn {
+        width: 34px !important;
+        height: 34px !important;
+        font-size: 16px !important;
+    }
+
+    /* タスク一覧はスマホで見やすいよう縦構成を維持しつつ調整 */
+    .task-item { flex-direction: row; padding: 12px 10px; }
+    .task-left { gap: 10px; }
+    .task-title { font-size: 15px; }
+    .task-right { margin-left: 5px; }
+    .edit-btn, .delete-btn { padding: 5px 8px; font-size: 11px; }
 }
 
-/* カテゴリ選択と＋ボタンを横並びにする */
-.input-options {
-    display: flex;
-    flex-wrap: wrap; /* スマホで折り返せるように */
-    gap: 10px;
-    align-items: center;
-}
+/* カテゴリ管理リスト */
+#category-manage-list { margin: 15px 0; max-height: 200px; overflow-y: auto; }
+.category-manage-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #eee; }
+.cat-delete-btn { background-color: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
 
-.add-cat-btn {
-    width: 40px !important;
-    height: 40px;
-    padding: 0 !important;
-    background: #6c757d;
-    color: white;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.cat-tag {
-    background: #e2e8f0;
-    color: #4a5568;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 11px;
-}
-
-/* カテゴリ管理リストのスタイル */
-#category-manage-list {
-    margin: 15px 0;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.category-manage-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px;
-    border-bottom: 1px solid #eee;
-}
-
-.cat-delete-btn {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.cat-delete-btn:hover {
-    background-color: #ff3333;
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
