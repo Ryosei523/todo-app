@@ -97,12 +97,12 @@ function renderTasks(tasks) {
         
         li.innerHTML = `
             <div class="task-top-row">
-                <input type="checkbox" style="width:20px;height:20px;" ${task.status === 'completed' ? 'checked' : ''} onchange="toggleTask(${task.task_id}, this.checked)">
-                <span class="task-title">${task.title}</span>
-                <small>${task.category} ${dateStr}</small>
+                <input type="checkbox" style="width:20px;height:20px;margin:0;" ${task.status === 'completed' ? 'checked' : ''} onchange="toggleTask(${task.task_id}, this.checked)">
+                <span class="task-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${task.title}</span>
+                <small style="opacity: 0.6; white-space: nowrap;">${task.category} ${dateStr}</small>
             </div>
             <div class="task-bottom-row">
-                <button class="edit-btn" onclick="openEditModal(${JSON.stringify(task).replace(/"/g, '&quot;')})">編集</button>
+                <button class="edit-btn" onclick="openEditModal(${taskData})">編集</button>
                 <button class="delete-btn" onclick="deleteTask(${task.task_id})">×</button>
             </div>
         `;
