@@ -48,11 +48,10 @@ header h1 {
 
 .header-right {
     display: flex;
-    align-items: center;    /* 名前とボタンの「中心」を合わせる */
+    align-items: center;
     gap: 10px;
 }
 
-/* ヘッダー内ボタンのスリム化 */
 .header-right button {
     width: auto !important;
     height: 36px !important;
@@ -74,14 +73,13 @@ input, select, button {
     box-sizing: border-box;
 }
 
-/* カテゴリと日付を特に大きく強調 */
 #new-task-category, 
 #new-task-date {
     height: 65px !important; 
     font-size: 18px !important;
     font-weight: bold;
     padding: 0 20px;
-    border: 2px solid var(--border); /* 少し太くして存在感を出す */
+    border: 2px solid var(--border);
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -101,7 +99,7 @@ button {
 
 button:active { transform: scale(0.98); }
 
-/* --- 5. タスクリスト（ドラッグ対応） --- */
+/* --- 5. タスクリスト（1行レイアウト・白ボタン化） --- */
 .card { 
     background: var(--card); 
     padding: 20px; 
@@ -110,240 +108,135 @@ button:active { transform: scale(0.98); }
     border: 1px solid var(--border); 
 }
 
-.task-item { 
-    background: var(--card); 
-    padding: 16px; 
-    margin-bottom: 12px; 
-    border-radius: 12px; 
-    border: 1px solid var(--border);
-    cursor: grab; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 10px;
-}
-
-.task-item:active { cursor: grabbing; }
-
-.task-top-row { 
-    display: flex; 
-    align-items: center; 
-    gap: 12px; 
-}
-
-.task-bottom-row { 
-    display: flex; 
-    justify-content: flex-end; 
-    gap: 8px; 
-}
-
-/* 編集・削除ボタンはスリムに */
-.edit-btn, .delete-btn {
-    width: auto;
-    height: 32px;
-    padding: 0 12px;
-    font-size: 12px;
-}
-
-/* --- 6. その他・ユーティリティ --- */
-.sortable-ghost { opacity: 0.2; }
-
-.progress-container { 
-    background: var(--border); 
-    height: 10px; 
-    border-radius: 5px; 
-    overflow: hidden; 
-}
-
-.progress-fill { 
-    background: #28a745; 
-    height: 100%; 
-    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
-}
-
-.task-item.completed .task-title {
-    text-decoration: line-through;
-    opacity: 0.5;
-}
-
-.user-label {
-    font-size: 14px;         /* ボタンに近いサイズ */
-    font-weight: 800;       /* はっきり見える太字 */
-    color: var(--text);     /* テーマに応じて白か黒に自動変更 */
-    margin-right: 12px;     /* ボタンとの適切な間隔 */
-    display: inline-block;
-    white-space: nowrap;    /* 改行を防止 */
-}
-
-.filter-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 10px; /* 入力欄との隙間 */
-}
-
-.tab-btn {
-    flex: 1; /* 3つのボタンを均等な幅に */
-    height: 55px !important; /* 高さを55pxに統一 */
-    background-color: #ffffff !important; /* 背景色は白 */
-    color: #000000 !important; /* 文字色は黒 */
-    border: 1px solid var(--border) !important;
-    border-radius: 12px;
-    font-weight: bold;
-    font-size: 15px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-/* 選択されているボタンのスタイル */
-.tab-btn.active {
-    border: 3px solid #000000 !important; /* 選択中は枠線を太くして強調 */
-    background-color: #f0f0f0 !important; /* 少しだけグレーにして「押されている感」を出す */
-}
-
-/* ダークモード時のフィルターボタン */
-[data-theme="dark"] .tab-btn {
-    background-color: #222222 !important; /* ダークモード時は視認性のために少し暗く */
-    color: #ffffff !important;
-    border-color: #444444 !important;
-}
-
-[data-theme="dark"] .tab-btn.active {
-    border-color: #ffffff !important;
-}
-
-/* --- 1. すべての入力枠・ボタンの高さを統一 --- */
-/* input, select, button に同じ高さとボックスモデルを適用します */
-.task-input-card input,
-.task-input-card select,
-.task-input-card button {
-    height: 55px !important;       /* 高さを55pxで強制統一 */
-    box-sizing: border-box !important; /* パディングや枠線を含めた高さにする */
-    font-size: 16px;              /* 文字サイズも揃える */
-    border-radius: 12px;          /* 角丸を統一 */
-    border: 1px solid var(--border);
-}
-
-/* 追加ボタンは背景色を変える */
-#add-task-btn {
-    background-color: #0056b3 !important; /* 濃い青色 */
-    color: white !important;
-    border: none !important;
-    font-weight: bold;
-}
-
-/* --- 2. カテゴリの選択枠（高さを50pxに調整） --- */
-#new-task-category {
-    appearance: none; 
-    -webkit-appearance: none;
-    height: 53px !important; /* 55pxから50pxに縮小 */
-    box-sizing: border-box !important;
-    
-    /* アイコンも50pxに合わせて少しだけ小さく調整 (24px → 20px) */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23999'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 15px center; 
-    background-size: 20px 20px; 
-    padding-right: 45px;
-    background-color: var(--bg);
-}
-
-/* --- 3. 日付入力枠とカレンダーアイコン（高さを50pxに調整） --- */
-#new-task-date {
-    height: 53px !important; /* 55pxから50pxに縮小 */
-    box-sizing: border-box !important;
-    position: relative;
-    padding-right: 45px;
-}
-
-/* スマホ・PC共通のカレンダーアイコン調整 */
-input[type="date"]::-webkit-calendar-picker-indicator {
-    display: block;
-    width: 20px; /* 高さ50pxに合わせてサイズを微調整 */
-    height: 20px;
-    cursor: pointer;
-    opacity: 0.6;
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
 #task-list {
     padding: 0;
     list-style: none;
-    margin-top: 20px; /* 入力フォームとの間隔 */
+    margin-top: 20px;
 }
 
 .task-item {
-    /* 入力フォームと同じスタイルを適用 */
     width: 100% !important;
     height: 55px !important;
     margin-bottom: 12px;
     border-radius: 12px;
     border: 1px solid var(--border);
-    background: var(--card); /* 背景色はカードの色 */
+    background: var(--card);
     color: var(--text);
     box-sizing: border-box !important;
     padding: 0 15px !important;
-    
-    /* 内部要素を横並びにする */
     display: flex;
     align-items: center;
     justify-content: space-between;
     cursor: grab;
 }
 
-/* タスクの左側（チェックボックス、タイトル、カテゴリ・日付） */
 .task-top-row {
     display: flex;
     align-items: center;
-    flex-grow: 1; /* 余ったスペースを埋める */
-    overflow: hidden; /* はみ出した部分を隠す */
+    flex-grow: 1;
+    overflow: hidden;
 }
 
-/* タスク名 */
 .task-title {
-    font-weight: bold; /* 太文字にする */
-    margin: 0 10px; /* 左右の間隔 */
-    white-space: nowrap; /* 改行を防ぐ */
+    font-weight: bold;
+    margin: 0 10px;
+    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* 長すぎる場合は省略記号(...)を表示 */
+    text-overflow: ellipsis;
     flex-grow: 1;
 }
 
-/* カテゴリ・日付 */
 .task-top-row small {
-    font-weight: bold; /* カテゴリと日付も太文字に */
+    font-weight: bold;
     white-space: nowrap;
-    flex-shrink: 0; /* 縮小しないようにする */
+    flex-shrink: 0;
 }
 
-/* タスクの右側（編集・削除ボタン） */
+/* ボタンエリアを右側に固定 */
 .task-bottom-row {
     display: flex;
     align-items: center;
-    height: 100%; /* 高さを親要素に合わせる */
+    gap: 8px;
+    margin-left: 10px;
 }
 
-/* 編集・削除ボタン */
+/* 編集・削除ボタン：フィルターボタンと同じ「白」に変更 */
 .edit-btn, .delete-btn {
-    /* 入力フォームのボタンと同じスタイルを適用 */
-    background-color: var(--text) !important;
-    color: var(--bg) !important;
-    border: none !important;
-    font-weight: bold;
-    cursor: pointer;
-    height: 100% !important; /* 高さを親要素に合わせる */
+    background-color: #ffffff !important; /* 背景色を白に */
+    color: #000000 !important;            /* 文字色を黒に */
+    border: 1px solid var(--border) !important;
+    height: 36px !important;              /* 1行に収まるよう高さを調整 */
     width: auto !important;
-    padding: 0 15px !important;
-    border-radius: 0 !important; /* 角丸をリセット */
-    margin: 0 !important;
+    padding: 0 12px !important;
+    border-radius: 8px !important;
+    font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* 削除ボタンの右側の角丸を親要素に合わせる */
-.task-bottom-row .delete-btn {
-    border-top-right-radius: 12px !important;
-    border-bottom-right-radius: 12px !important;
+/* ダークモード時のタスク内ボタン色調整 */
+[data-theme="dark"] .edit-btn, 
+[data-theme="dark"] .delete-btn {
+    background-color: #222222 !important;
+    color: #ffffff !important;
+    border-color: #444444 !important;
+}
+
+/* --- 6. その他・ユーティリティ --- */
+.user-label {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text);
+    margin-right: 12px;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.tab-btn {
+    flex: 1;
+    height: 55px !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.tab-btn.active {
+    border: 3px solid #000000 !important;
+    background-color: #f0f0f0 !important;
+}
+
+[data-theme="dark"] .tab-btn {
+    background-color: #222222 !important;
+    color: #ffffff !important;
+    border-color: #444444 !important;
+}
+
+/* 既存のフォーム共通設定 */
+.task-input-card input,
+.task-input-card select,
+.task-input-card button {
+    height: 55px !important;
+    box-sizing: border-box !important;
+    border-radius: 12px;
+}
+
+#add-task-btn {
+    background-color: #0056b3 !important;
+    color: white !important;
+    border: none !important;
+}
+
+#new-task-category, #new-task-date {
+    height: 53px !important;
 }

@@ -101,17 +101,17 @@ function renderTasks(tasks) {
         li.dataset.id = task.task_id;
         
         li.innerHTML = `
-            <div class="task-top-row">
-                <input type="checkbox" style="width:20px;height:20px;margin:0;" 
-                    ${task.status === 'completed' ? 'checked' : ''} 
-                    onchange="toggleTask(${task.task_id}, this.checked)">
-                <span class="task-title">${task.title}</span>
-                <span class="task-meta">${task.category || '未設定'} ${dateStr}</span>
-            </div>
-            <div class="task-bottom-row">
-                <button class="edit-btn" onclick="openEditModal(${taskData})">編集</button>
-                <button class="delete-btn" onclick="deleteTask(${task.task_id})">×</button>
-            </div>
+        <div class="task-top-row" style="display: flex; align-items: center; flex: 1; overflow: hidden;">
+            <input type="checkbox" style="width:20px;height:20px;margin:0;" 
+                ${task.status === 'completed' ? 'checked' : ''} 
+            onchange="toggleTask(${task.task_id}, this.checked)">
+            <span class="task-title">${task.title}</span>
+            <span class="task-meta">${task.category || ''} ${dateStr}</span>
+        </div>
+        <div class="task-bottom-row">
+            <button class="edit-btn" onclick="openEditModal(${taskData})">編集</button>
+            <button class="delete-btn" onclick="deleteTask(${task.task_id})">×</button>
+        </div>
         `;
         taskList.appendChild(li);
     });
