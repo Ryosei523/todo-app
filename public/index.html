@@ -30,7 +30,7 @@
             <h1>To Do</h1>
             <div class="header-right">
                 <span id="display-name" class="user-label"></span>
-                
+
                 <button id="theme-toggle" class="subtle-btn">🌓 テーマ切替</button>
                 <button id="logout-btn" class="danger">ログアウト</button>
             </div>
@@ -47,6 +47,12 @@
         </div>
 
         <main>
+            <div class="filter-tabs">
+                <button class="tab-btn active" id="filter-all" onclick="setFilter('all')">すべて</button>
+                <button class="tab-btn" id="filter-pending" onclick="setFilter('pending')">未完了</button>
+                <button class="tab-btn" id="filter-completed" onclick="setFilter('completed')">完了</button>
+            </div>
+
             <div class="card task-input-card">
                 <input type="text" id="new-task-title" placeholder="タスク名">
                 <select id="new-task-category">

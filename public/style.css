@@ -173,3 +173,39 @@ button:active { transform: scale(0.98); }
     display: inline-block;
     white-space: nowrap;    /* 改行を防止 */
 }
+
+.filter-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px; /* 入力欄との隙間 */
+}
+
+.tab-btn {
+    flex: 1; /* 3つのボタンを均等な幅に */
+    height: 55px !important; /* 高さを55pxに統一 */
+    background-color: #ffffff !important; /* 背景色は白 */
+    color: #000000 !important; /* 文字色は黒 */
+    border: 1px solid var(--border) !important;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* 選択されているボタンのスタイル */
+.tab-btn.active {
+    border: 3px solid #000000 !important; /* 選択中は枠線を太くして強調 */
+    background-color: #f0f0f0 !important; /* 少しだけグレーにして「押されている感」を出す */
+}
+
+/* ダークモード時のフィルターボタン */
+[data-theme="dark"] .tab-btn {
+    background-color: #222222 !important; /* ダークモード時は視認性のために少し暗く */
+    color: #ffffff !important;
+    border-color: #444444 !important;
+}
+
+[data-theme="dark"] .tab-btn.active {
+    border-color: #ffffff !important;
+}
