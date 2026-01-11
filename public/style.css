@@ -158,6 +158,7 @@ button:active { transform: scale(0.95); }
     .container { width: 96%; padding: 10px; margin: 10px auto; }
     /* --- 85行目付近：スマホ版の日付表示を「最前面」に引き出す --- */
     input[type="date"] {
+        -webkit-appearance: none !important;
         display: flex !important;
         align-items: center !important;
         justify-content: flex-start !important;
