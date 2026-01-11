@@ -24,14 +24,14 @@ header h1 { margin: 0; font-size: 24px; color: #1a1a1a; }
 /* タスク入力エリア */
 .task-input-card { display: flex; flex-direction: column; gap: 10px; }
 
-/* 入力オプション（カテゴリ、日付、優先度）の横並び設定 */
+/* 入力オプション（カテゴリ、日付、優先度）の設定 */
 .input-options { 
     display: flex; 
     gap: 10px; 
     align-items: center; 
-    flex-wrap: nowrap; /* 折り返しを禁止して1行に強制 */
+    flex-wrap: wrap; /* スマホで折り返せるように変更 */
 }
-.input-options input, .input-options select { margin: 0; flex: 1; min-width: 0; } /* min-width: 0 が1行に収めるコツ */
+.input-options input, .input-options select { margin: 0; flex: 1; min-width: 0; }
 
 /* --- タスク一覧のレイアウト --- */
 #task-list { list-style: none; padding: 0; }
@@ -83,45 +83,50 @@ header h1 { margin: 0; font-size: 24px; color: #1a1a1a; }
 .tab-btn { flex: 1; padding: 10px; background: #e9ecef; color: #555; border-radius: 8px; font-size: 14px; }
 .tab-btn.active { background: #007bff; color: white; }
 
-/* カテゴリタグとボタン */
-.add-cat-btn { width: 40px !important; height: 40px; padding: 0 !important; background: #6c757d; color: white; font-size: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin: 0 !important; }
+/* カテゴリ追加ボタン */
+.add-cat-btn { width: 44px !important; height: 44px !important; padding: 0 !important; background: #6c757d; color: white; font-size: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin: 0 !important; }
 .cat-tag { background: #e2e8f0; color: #4a5568; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 
-/* --- レスポンシブ対応（スマホ表示の修正） --- */
+/* --- スマホ表示のレスポンシブ修正 (480px以下) --- */
 @media (max-width: 480px) {
     .container { margin: 10px auto; padding: 10px; width: 95%; }
-    
-    /* ヘッダーを縦に並べて中央揃えに */
     header { flex-direction: column; gap: 10px; text-align: center; }
 
-    /* ★ここがポイント：入力オプションを横並びで維持 */
+    /* 入力オプションを2列のグリッドのように配置 */
     .input-options {
-        flex-direction: row !important; /* 横並びを強制 */
-        flex-wrap: nowrap !important;  /* 折り返しさせない */
-        gap: 5px !important;           /* 隙間を狭くする */
+        display: flex !important;
+        flex-wrap: wrap !important; 
+        gap: 10px !important;
     }
 
-    /* 各要素のサイズを小さくして1行に詰め込む */
-    .input-options select, 
-    .input-options input[type="date"] {
-        padding: 8px 4px !important;
-        font-size: 12px !important;
-        min-width: 0 !important; /* 要素が縮小できるようにする */
+    /* 1段目: カテゴリ(自律幅) + ＋ボタン(固定) */
+    #new-task-category {
+        flex: 1 !important; /* 残りの幅を埋める */
+        min-width: 0;
     }
-
-    /* ＋ボタンも少し小さく */
     .add-cat-btn {
-        width: 34px !important;
-        height: 34px !important;
-        font-size: 16px !important;
+        width: 44px !important; /* 指で押しやすい固定サイズ */
+        height: 44px !important;
     }
 
-    /* タスク一覧はスマホで見やすいよう縦構成を維持しつつ調整 */
-    .task-item { flex-direction: row; padding: 12px 10px; }
-    .task-left { gap: 10px; }
-    .task-title { font-size: 15px; }
-    .task-right { margin-left: 5px; }
-    .edit-btn, .delete-btn { padding: 5px 8px; font-size: 11px; }
+    /* 2段目: 日付(50%) + 優先度(50%) */
+    #new-task-date, 
+    #new-task-priority {
+        flex: none !important;
+        width: calc(50% - 5px) !important; /* 隙間を引いた半分 */
+    }
+
+    /* 文字サイズを16px以上に保つ（iPhoneの自動ズーム防止） */
+    .input-options select, 
+    .input-options input {
+        height: 44px !important;
+        font-size: 16px !important;
+        padding: 8px !important;
+    }
+
+    /* その他リスト表示の微調整 */
+    .task-item { padding: 15px 12px; }
+    .task-title { font-size: 16px; }
 }
 
 /* カテゴリ管理リスト */
