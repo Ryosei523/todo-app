@@ -49,17 +49,18 @@ input[type="date"],
 select { 
     display: flex !important;
     align-items: center !important;
-    justify-content: center !important; /* 左(flex-start)から中央(center)へ */
+    justify-content: center !important; /* 中身を中央へ */
     text-align: center !important;      /* 文字も中央へ */
+    text-align-last: center !important; /* セレクトボックスの選択肢も中央へ */
     width: 100% !important; 
     height: 50px !important; 
-    padding: 0 !important;    border: 1px solid #e0e0e0; 
+    padding: 0 !important;              /* 左右のズレを防ぐためpaddingを0に */
+    border: 1px solid #e0e0e0; 
     border-radius: 10px; 
     box-sizing: border-box !important; 
     font-size: 16px; 
     background-color: #fff;
-    transition: all 0.2s ease; 
-}
+    margin: 0 !important;}
 
 input:focus, select:focus {
     border-color: #007bff;
@@ -91,15 +92,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"]::before {
     content: "年 / 月 / 日";
     position: absolute;
-    left: 50% !important;               /* 左から50%の位置へ */
+    left: 50% !important;
     top: 50%;
-    transform: translate(-50%, -50%) !important; /* 自身の幅の半分戻して真ん中へ */
+    transform: translate(-50%, -50%) !important; /* 自身の中心を枠の中心に重ねる */
     color: #999;
     z-index: 1;
     pointer-events: none;
     font-size: 14px;
+    width: 100%;             /* 幅いっぱいに広げて中央寄せを確実にする */
+    text-align: center;
 }
-
 /* 右側にモダンな線画カレンダーアイコンを表示 */
 input[type="date"]::after {
     content: "";
@@ -126,11 +128,21 @@ input[type="date"]:focus::before {
 .category-row-wrapper {
     display: flex; 
     align-items: center; 
+    justify-content: center; /* ＋ボタンとセレクト全体を中央付近へ */
     background: #fff; 
     border: 1px solid #e0e0e0; 
     border-radius: 10px; 
     padding-left: 8px; 
     height: 50px;
+    box-sizing: border-box;
+}
+
+.category-row-wrapper select {
+    border: none !important;
+    flex: 1;
+    background: transparent;
+    height: 100% !important;
+    text-align: center !important; /* 文字を中央へ */
 }
 .add-cat-btn-subtle {
     background: #f0f2f5 !important; 
@@ -147,7 +159,6 @@ input[type="date"]:focus::before {
     margin-right: 8px !important; 
     border: none !important;
 }
-.category-row-wrapper select { border: none !important; flex: 1; background: transparent; height: 100% !important; }
 
 /* --- 6. モーダル・中央配置 --- */
 .modal {
@@ -223,7 +234,7 @@ button:active { transform: scale(0.95); } /* 押し込み時の動き */
         height: 52px !important; 
         font-size: 16px !important;
     }
-}
+
 
 /* 進捗バー */
 .progress-container { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; margin: 15px 0; }
