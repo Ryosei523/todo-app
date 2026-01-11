@@ -156,26 +156,34 @@ button:active { transform: scale(0.95); }
 /* --- 8. スマホ表示最適化 (左寄せ強制) --- */
 @media (max-width: 480px) {
     .container { width: 96%; padding: 10px; margin: 10px auto; }
-    
+
     input[type="date"] {
-        justify-content: flex-start !important; /* スマホでも左寄せ */
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important; /* 強制的に左寄せ */
         text-align: left !important;
         padding-left: 12px !important;
+        -webkit-appearance: none !important;    /* Safariの標準スタイルを無効化 */
     }
-    
+
+    /* 「年 / 月 / 日」のガイド文字を左端に絶対配置 */
     input[type="date"]::before {
-        left: 12px !important;
+        content: "年 / 月 / 日" !important;
+        position: absolute !important;
+        left: 12px !important;                 /* 左から12pxの位置に固定 */
+        width: auto !important;                /* 幅を自動にして中央寄せを無効化 */
+        text-align: left !important;
+        transform: translateY(-50%) !important; /* 上下中央のみ維持 */
     }
 
-    input[type="date"]::after {
-        display: block !important; /* スマホでもアイコンを出す */
-        right: 12px !important;
-
-    .task-input-card input, .task-input-card select, .category-row-wrapper { 
-        height: 52px !important; 
+    /* スマホで入力した後の「日付文字」も左に寄せる */
+    input[type="date"]::-webkit-datetime-edit {
+        display: block !important;
+        text-align: left !important;
+        padding-left: 0 !important;
+        width: 100%;
     }
 }
-
 /* 進捗バー */
 .progress-container { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; margin: 15px 0; }
 .progress-fill { height: 100%; background: #28a745; transition: width 0.6s ease; }
