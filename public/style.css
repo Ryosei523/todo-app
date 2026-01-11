@@ -24,27 +24,20 @@ header h1 { margin: 0; font-size: 24px; color: #1a1a1a; }
 /* タスク入力エリア */
 .task-input-card { display: flex; flex-direction: column; gap: 10px; }
 
-/* 入力オプション（カテゴリ、日付、優先度）の設定 */
+/* 入力オプションの設定 */
 .input-options { 
     display: flex; 
     gap: 10px; 
     align-items: center; 
-    flex-wrap: wrap; /* スマホで折り返せるように変更 */
 }
 .input-options input, .input-options select { margin: 0; flex: 1; min-width: 0; }
 
 /* --- タスク一覧のレイアウト --- */
 #task-list { list-style: none; padding: 0; }
 .task-item { 
-    background: white; 
-    padding: 15px 20px; 
-    border-radius: 10px; 
-    margin-bottom: 12px;
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06); 
-    border-left: 6px solid #ddd;
+    background: white; padding: 15px 20px; border-radius: 10px; margin-bottom: 12px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 6px solid #ddd;
     animation: fadeIn 0.3s ease-out;
 }
 
@@ -53,8 +46,7 @@ header h1 { margin: 0; font-size: 24px; color: #1a1a1a; }
 .task-info { display: flex; flex-direction: column; flex-grow: 1; }
 .task-title { font-size: 17px; font-weight: bold; color: #1a1a1a; }
 .task-meta { color: #777; font-size: 13px; margin-top: 5px; display: flex; align-items: center; gap: 12px; }
-
-.task-meta span { padding: 2px 8px; border-radius: 6px; font-size: 11px; background: #f8f9fa; border: 1px solid #eee; }
+.cat-tag { background: #e2e8f0; color: #4a5568; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 
 .task-right { display: flex; gap: 8px; flex-shrink: 0; margin-left: 15px; }
 .edit-btn { background: #f0f2f5; color: #555; padding: 6px 12px; font-size: 12px; border: 1px solid #ddd; }
@@ -63,70 +55,62 @@ header h1 { margin: 0; font-size: 24px; color: #1a1a1a; }
 .task-item.priority-high { border-left-color: #ff4d4d; }
 .task-item.priority-medium { border-left-color: #ffc107; }
 .task-item.priority-low { border-left-color: #28a745; }
-.task-item.completed { opacity: 0.6; background: #fcfcfc; border-left-color: #ccc; }
-.task-item.completed .task-title { text-decoration: line-through; color: #999; }
-
-/* 統計・進捗 */
-.stats-bar { padding: 15px 25px; margin-bottom: 25px; }
-.stats-info { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; font-weight: bold; color: #666; }
-.progress-container { background: #eef0f2; height: 10px; border-radius: 5px; overflow: hidden; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, #28a745, #5cd65c); width: 0%; transition: width 0.5s ease; }
-
-/* モーダル */
-.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-.modal-content { width: 90%; max-width: 400px; }
-.modal-buttons { display: flex; gap: 15px; margin-top: 25px; }
-.modal-buttons button { flex: 1; padding: 12px; }
-
-/* タブ */
-.filter-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-.tab-btn { flex: 1; padding: 10px; background: #e9ecef; color: #555; border-radius: 8px; font-size: 14px; }
-.tab-btn.active { background: #007bff; color: white; }
-
-/* カテゴリ追加ボタン */
-.add-cat-btn { width: 44px !important; height: 44px !important; padding: 0 !important; background: #6c757d; color: white; font-size: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin: 0 !important; }
-.cat-tag { background: #e2e8f0; color: #4a5568; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 
 /* --- スマホ表示のレスポンシブ修正 (480px以下) --- */
 @media (max-width: 480px) {
-    .container { margin: 10px auto; padding: 10px; width: 95%; }
+    .container { margin: 10px auto; padding: 8px; width: 98%; }
     header { flex-direction: column; gap: 10px; text-align: center; }
 
-    /* 入力オプションを2列のグリッドのように配置 */
+    /* すべてを横一線に並べる強制設定 */
     .input-options {
         display: flex !important;
-        flex-wrap: wrap !important; 
-        gap: 10px !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important; /* 絶対に折り返さない */
+        gap: 4px !important;          /* 隙間を最小限に */
     }
 
-    /* 1段目: カテゴリ(自律幅) + ＋ボタン(固定) */
-    #new-task-category {
-        flex: 1 !important; /* 残りの幅を埋める */
-        min-width: 0;
+    /* 各要素の幅バランス調整 */
+    #new-task-category { flex: 2.5 !important; } 
+    .add-cat-btn { 
+        flex: 0 0 36px !important;  /* ＋ボタンを小さく固定 */
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 16px !important;
+        background: #6c757d; color: white;
     }
-    .add-cat-btn {
-        width: 44px !important; /* 指で押しやすい固定サイズ */
-        height: 44px !important;
-    }
+    #new-task-date { flex: 2 !important; }
+    #new-task-priority { flex: 2 !important; }
 
-    /* 2段目: 日付(50%) + 優先度(50%) */
-    #new-task-date, 
-    #new-task-priority {
-        flex: none !important;
-        width: calc(50% - 5px) !important; /* 隙間を引いた半分 */
-    }
-
-    /* 文字サイズを16px以上に保つ（iPhoneの自動ズーム防止） */
+    /* 全体的な高さを抑え、1行に収めるためのフォントサイズ調整 */
     .input-options select, 
     .input-options input {
-        height: 44px !important;
-        font-size: 16px !important;
-        padding: 8px !important;
+        height: 36px !important;
+        padding: 4px 2px !important;
+        font-size: 11px !important;
+        margin: 0 !important;
     }
 
-    /* その他リスト表示の微調整 */
-    .task-item { padding: 15px 12px; }
-    .task-title { font-size: 16px; }
+    /* 日付ボタンの空白問題を解決：擬似要素でアイコンを表示 */
+    input[type="date"] {
+        position: relative;
+    }
+    input[type="date"]::before {
+        content: "📅"; /* アイコンを表示してボタンであることを明示 */
+        position: absolute;
+        left: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+        pointer-events: none; /* アイコンがクリックを邪魔しないようにする */
+    }
+    /* 値が入っている、またはフォーカス時はアイコンを隠す（ブラウザの標準表示に任せる）*/
+    input[type="date"]:focus::before,
+    input[type="date"]:not(:placeholder-shown)::before {
+        display: none;
+    }
+
+    .task-item { padding: 12px 8px; }
+    .task-title { font-size: 15px; }
 }
 
 /* カテゴリ管理リスト */
