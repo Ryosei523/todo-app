@@ -156,33 +156,39 @@ button:active { transform: scale(0.95); }
 /* --- 8. スマホ表示最適化 (左寄せ強制) --- */
 @media (max-width: 480px) {
     .container { width: 96%; padding: 10px; margin: 10px auto; }
-
-    input[type="date"] {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: flex-start !important; /* 強制的に左寄せ */
-        text-align: left !important;
-        padding-left: 12px !important;
-        -webkit-appearance: none !important;    /* Safariの標準スタイルを無効化 */
+        input[type="date"] {
+        display: flex !important;               /* flexにして配置を制御 */
+        align-items: center !important;         /* 上下中央揃え */
+        justify-content: flex-start !important; /* 左寄せを強制 */
+        text-align: left !important;            /* 文字自体も左寄せ */
+        padding-left: 12px !important;          /* 左端の余白 */
+        position: relative !important;          /* 擬似要素を表示するための土台 */
+        color: transparent;                     /* 入力前はブラウザの初期文字(yyyy/mm/dd等)を透明化 */
     }
 
-    /* 「年 / 月 / 日」のガイド文字を左端に絶対配置 */
-    input[type="date"]::before {
-        content: "年 / 月 / 日" !important;
-        position: absolute !important;
-        left: 12px !important;                 /* 左から12pxの位置に固定 */
-        width: auto !important;                /* 幅を自動にして中央寄せを無効化 */
-        text-align: left !important;
-        transform: translateY(-50%) !important; /* 上下中央のみ維持 */
-    }
+    /* 日付未選択時に「年 / 月 / 日」を左側に表示 */
+        input[type="date"]::before {
+            content: "年 / 月 / 日" !important;      /* 文字を強制表示 */
+            position: absolute !important;
+            left: 12px !important;                 /* 左端に固定 */
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            color: #999 !important;                /* 薄いグレー */
+            font-size: 14px !important;
+            display: block !important;              /* 確実に表示させる */
+            z-index: 10 !important;                /* ブラウザの純正UIより前面に出す */
+        }
 
-    /* スマホで入力した後の「日付文字」も左に寄せる */
-    input[type="date"]::-webkit-datetime-edit {
-        display: block !important;
-        text-align: left !important;
-        padding-left: 0 !important;
-        width: 100%;
-    }
+        /* 日付が選択されたら、ガイド文字を消して日付を表示する */
+        input[type="date"]:focus,
+        input[type="date"]:valid {
+            color: #333 !important;                 /* 選択した日付を表示 */
+        }
+        
+        input[type="date"]:focus::before,
+        input[type="date"]:valid::before {
+            display: none !important;               /* 入力後は「年/月/日」を隠す */
+        }
 }
 /* 進捗バー */
 .progress-container { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; margin: 15px 0; }
