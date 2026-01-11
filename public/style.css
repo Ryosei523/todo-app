@@ -87,10 +87,20 @@ input[type="date"]::before {
     font-size: 14px;
 }
 
-/* カレンダーアイコンを完全に削除 */
 input[type="date"]::after {
-    content: none !important;
-    display: none !important;
+    content: ""; /* アイコンを表示 */
+    position: absolute;
+    right: 12px !important; /* 右端に配置 */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: 2;
+    pointer-events: none;
+    display: block !important; /* 強制的に表示 */
 }
 
 input[type="date"]:valid::before,
@@ -156,6 +166,10 @@ button:active { transform: scale(0.95); }
     input[type="date"]::before {
         left: 12px !important;
     }
+
+    input[type="date"]::after {
+        display: block !important; /* スマホでもアイコンを出す */
+        right: 12px !important;
 
     .task-input-card input, .task-input-card select, .category-row-wrapper { 
         height: 52px !important; 
