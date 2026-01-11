@@ -99,7 +99,7 @@ button {
 
 button:active { transform: scale(0.98); }
 
-/* --- 5. タスクリスト（1行レイアウト・白ボタン化） --- */
+/* --- 5. タスクリスト（1行レイアウト・調整版） --- */
 .card { 
     background: var(--card); 
     padding: 20px; 
@@ -146,36 +146,57 @@ button:active { transform: scale(0.98); }
     flex-grow: 1;
 }
 
-.task-top-row small {
+/* カテゴリと日付：間隔を広げて読みやすく */
+.task-category {
     font-weight: bold;
+    font-size: 13px;
+    opacity: 0.8;
     white-space: nowrap;
-    flex-shrink: 0;
+    margin-right: 15px; /* ここで隙間を確保 */
 }
 
-/* ボタンエリアを右側に固定 */
+.task-date {
+    font-weight: bold;
+    font-size: 13px;
+    opacity: 0.8;
+    white-space: nowrap;
+}
+
+/* ボタンエリア：重心を少し下げる */
 .task-bottom-row {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-left: 10px;
+    transform: translateY(2px); /* 2px下にずらしてバランス調整 */
 }
 
-/* 編集・削除ボタン：フィルターボタンと同じ「白」に変更 */
 .edit-btn, .delete-btn {
-    background-color: #ffffff !important; /* 背景色を白に */
-    color: #000000 !important;            /* 文字色を黒に */
+    background-color: #ffffff !important;
+    color: #000000 !important;
     border: 1px solid var(--border) !important;
-    height: 36px !important;              /* 1行に収まるよう高さを調整 */
+    height: 36px !important;
     width: auto !important;
     padding: 0 12px !important;
     border-radius: 8px !important;
-    font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-/* ダークモード時のタスク内ボタン色調整 */
+.edit-btn {
+    font-size: 12px !important;
+}
+
+/* ×ボタン：サイズを大きく、太く強調 */
+.delete-btn {
+    font-size: 18px !important; 
+    font-weight: 900 !important;
+}
+
+/* ダークモード時のボタン色調整 */
 [data-theme="dark"] .edit-btn, 
 [data-theme="dark"] .delete-btn {
     background-color: #222222 !important;
@@ -222,7 +243,6 @@ button:active { transform: scale(0.98); }
     border-color: #444444 !important;
 }
 
-/* 既存のフォーム共通設定 */
 .task-input-card input,
 .task-input-card select,
 .task-input-card button {
@@ -239,4 +259,9 @@ button:active { transform: scale(0.98); }
 
 #new-task-category, #new-task-date {
     height: 53px !important;
+}
+
+.task-item.completed .task-title {
+    text-decoration: line-through;
+    opacity: 0.5;
 }

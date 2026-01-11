@@ -100,13 +100,14 @@ function renderTasks(tasks) {
         li.className = `task-item ${task.status === 'completed' ? 'completed' : ''}`;
         li.dataset.id = task.task_id;
         
-        li.innerHTML = `
+    li.innerHTML = `
         <div class="task-top-row" style="display: flex; align-items: center; flex: 1; overflow: hidden;">
             <input type="checkbox" style="width:20px;height:20px;margin:0;" 
                 ${task.status === 'completed' ? 'checked' : ''} 
-            onchange="toggleTask(${task.task_id}, this.checked)">
+                onchange="toggleTask(${task.task_id}, this.checked)">
             <span class="task-title">${task.title}</span>
-            <span class="task-meta">${task.category || ''} ${dateStr}</span>
+            <span class="task-category">${task.category || ''}</span>
+            <span class="task-date">${dateStr}</span>
         </div>
         <div class="task-bottom-row">
             <button class="edit-btn" onclick="openEditModal(${taskData})">編集</button>
