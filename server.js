@@ -4,13 +4,16 @@ const session = require('express-session');
 const bcrypt = require('bcrypt');
 const app = express();
 
-// ポート番号は環境変数から取得（Render等のクラウドでは自動で割り当てられます）
+// ポート番号は環境変数から取得
 const port = process.env.PORT || 3000;
+
+// Render等のプロキシ環境でセッションを動作させるために必須の設定
+app.set('trust proxy', 1); 
 
 app.use(express.json());
 app.use(express.static('public'));
 
-// セッションシークレットも環境変数に逃がすとより安全です
+// セッションの設定
 app.use(session({
     secret: process.env.SESSION_SECRET || 'secret_key_todo_app',
     resave: false,
@@ -18,18 +21,19 @@ app.use(session({
     cookie: { 
         httpOnly: true, 
         maxAge: 24 * 60 * 60 * 1000,
-        // デプロイ先がHTTPSの場合は secure: true にする必要がありますが、まずはこのままでOK
+        // 本番環境(HTTPS)では secure: true が必須
+        secure: process.env.NODE_ENV === 'production' || true, 
+        sameSite: 'lax'
     }
 }));
 
-// データベース接続情報（環境変数がある場合はそれを使い、なければローカルの設定を使う）
+// データベース接続情報
 const connection = mysql.createConnection({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'task_db',
     port: process.env.DB_PORT || 3306,
-    // Aivenなどの外部DBを使う場合に備え、SSL接続の許可設定を追加
     ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
 });
 

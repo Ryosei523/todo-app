@@ -88,17 +88,25 @@ document.getElementById('logout-btn').addEventListener('click', async () => {
 // --- カテゴリ操作系 ---
 
 async function fetchCategories() {
-    const res = await fetch('/api/categories');
-    const categories = await res.json();
-    
-    // 新規作成用と編集用、両方のセレクトボックスを更新
-    const optionsHTML = '<option value="">カテゴリなし</option>' + 
-        categories.map(cat => `<option value="${cat.category_id}">${cat.category_name}</option>`).join('');
-    
-    newTaskCategory.innerHTML = optionsHTML;
-    editTaskCategory.innerHTML = optionsHTML;
-}
+    try {
+        const response = await fetch('/api/categories');
+        
+        // 401エラーなどの場合に処理を中断する
+        if (!response.ok) {
+            console.error('カテゴリの取得に失敗しました');
+            return; 
+        }
 
+        const categories = await response.json();
+        
+        // categoriesが配列であることを確認してからmapを使う
+        if (!Array.isArray(categories)) return;
+
+        // ... 既存のmap処理 ...
+    } catch (error) {
+        console.error('通信エラー:', error);
+    }
+}
 window.openCategoryModal = () => document.getElementById('category-modal').classList.remove('hidden');
 window.closeCategoryModal = () => document.getElementById('category-modal').classList.add('hidden');
 
