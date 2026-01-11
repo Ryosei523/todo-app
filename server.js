@@ -1,65 +1,3 @@
-// --- ファイルの冒頭に追加：データベース初期化 ---
-async function initializeDB() {
-    try {
-        // position列があるか確認し、なければ追加する
-        const [columns] = await db.query("SHOW COLUMNS FROM tasks LIKE 'position'");
-        if (columns.length === 0) {
-            await db.query("ALTER TABLE tasks ADD COLUMN position INT DEFAULT 0");
-            console.log("データベースにposition列を追加しました");
-        }
-    } catch (err) {
-        console.error("DB初期化エラー:", err);
-    }
-}
-initializeDB();
-
-// --- タスク取得APIを修正（position順に並べる） ---
-app.get('/api/tasks', async (req, res) => {
-    try {
-        const [rows] = await db.query('SELECT * FROM tasks WHERE user_id = ? ORDER BY position ASC', [req.session.userId]);
-        res.json(rows);
-    } catch (err) {
-        res.status(500).send(err);
-    }
-});
-
-// --- 追加：並び順を保存するAPI ---
-app.patch('/api/tasks/reorder', async (req, res) => {
-    const { ids } = req.body; // フロントから届いたIDの配列
-    try {
-        const queries = ids.map((id, index) => {
-            return db.query('UPDATE tasks SET position = ? WHERE task_id = ? AND user_id = ?', [index, id, req.session.userId]);
-        });
-        await Promise.all(queries);
-        res.json({ success: true });
-    } catch (err) {
-        res.status(500).send(err);
-    }
-});
-
-// AivenのDBに自動で列を追加する設定
-async function initializeDB() {
-    try {
-        const [columns] = await db.query("SHOW COLUMNS FROM tasks LIKE 'position'");
-        if (columns.length === 0) {
-            await db.query("ALTER TABLE tasks ADD COLUMN position INT DEFAULT 0");
-            console.log("position列を自動追加しました");
-        }
-    } catch (err) { console.error("DB初期化エラー:", err); }
-}
-initializeDB();
-
-// 並び順保存用のAPI
-app.patch('/api/tasks/reorder', async (req, res) => {
-    const { ids } = req.body;
-    try {
-        const queries = ids.map((id, index) => {
-            return db.query('UPDATE tasks SET position = ? WHERE task_id = ? AND user_id = ?', [index, id, req.session.userId]);
-        });
-        await Promise.all(queries);
-        res.json({ success: true });
-    } catch (err) { res.status(500).send(err); }
-});
 const express = require('express');
 const mysql = require('mysql2');
 const session = require('express-session');
@@ -69,7 +7,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.set('trust proxy', 1); 
-
 app.use(express.json());
 app.use(express.static('public'));
 
@@ -80,18 +17,40 @@ app.use(session({
     cookie: { 
         httpOnly: true, 
         maxAge: 24 * 60 * 60 * 1000,
-        secure: true, 
+        secure: process.env.NODE_ENV === 'production', 
         sameSite: 'lax'
     }
 }));
 
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'task_db',
+const db = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     port: process.env.DB_PORT || 3306,
-    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
+    ssl: { rejectUnauthorized: false }
+});
+
+// --- データベース初期化（カラムの自動追加） ---
+db.connect(err => {
+    if (err) return console.error('DB接続失敗:', err);
+    console.log('DB接続成功');
+
+    // 並び順用のposition列を追加
+    db.query("SHOW COLUMNS FROM tasks LIKE 'position'", (err, results) => {
+        if (!err && results.length === 0) {
+            db.query("ALTER TABLE tasks ADD COLUMN position INT DEFAULT 0");
+            console.log("position列を追加しました");
+        }
+    });
+
+    // 固定カテゴリ保存用のcategory列（文字列）を追加
+    db.query("SHOW COLUMNS FROM tasks LIKE 'category'", (err, results) => {
+        if (!err && results.length === 0) {
+            db.query("ALTER TABLE tasks ADD COLUMN category VARCHAR(50)");
+            console.log("category列を追加しました");
+        }
+    });
 });
 
 // --- 認証 API ---
@@ -99,7 +58,7 @@ app.post('/api/register', async (req, res) => {
     const { username, password } = req.body;
     try {
         const hash = await bcrypt.hash(password, 10);
-        connection.query('INSERT INTO users (username, password_hash) VALUES (?, ?)', [username, hash], (err) => {
+        db.query('INSERT INTO users (username, password_hash) VALUES (?, ?)', [username, hash], (err) => {
             if (err) return res.json({ success: false, message: 'その名前は使われています' });
             res.json({ success: true, message: '登録しました！' });
         });
@@ -108,7 +67,7 @@ app.post('/api/register', async (req, res) => {
 
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
-    connection.query('SELECT * FROM users WHERE username = ?', [username], async (err, results) => {
+    db.query('SELECT * FROM users WHERE username = ?', [username], async (err, results) => {
         if (err || results.length === 0) return res.json({ success: false, message: 'ユーザーが見つかりません' });
         const match = await bcrypt.compare(password, results[0].password_hash);
         if (match) {
@@ -128,83 +87,56 @@ app.get('/api/user', (req, res) => {
     res.json(req.session.userId ? { loggedIn: true, username: req.session.username } : { loggedIn: false });
 });
 
-// --- カテゴリ API ---
-app.get('/api/categories', (req, res) => {
+// --- タスク API (シンプル版) ---
+
+// 並び順を考慮した取得
+app.get('/api/tasks', (req, res) => {
     if (!req.session.userId) return res.status(401).json({ message: '未ログイン' });
-    connection.query('SELECT * FROM categories WHERE user_id = ?', [req.session.userId], (err, results) => {
+    const sql = 'SELECT * FROM tasks WHERE user_id = ? ORDER BY position ASC';
+    db.query(sql, [req.session.userId], (err, results) => {
         if (err) return res.status(500).json(err);
         res.json(results);
     });
 });
 
-app.post('/api/categories', (req, res) => {
-    const { category_name } = req.body;
-    if (!req.session.userId || !category_name) return res.status(400).json({ message: '不正なリクエスト' });
-    connection.query('INSERT INTO categories (user_id, category_name) VALUES (?, ?)', [req.session.userId, category_name], (err, result) => {
-        if (err) return res.status(500).json(err);
-        res.json({ success: true, categoryId: result.insertId });
-    });
-});
-
-// --- カテゴリ削除 API (詳細ログを追加) ---
-app.delete('/api/categories/:id', (req, res) => {
-    const categoryId = req.params.id;
-    const userId = req.session.userId;
-
-    if (!userId) {
-        console.error('Delete Category Error: Unauthorized');
-        return res.status(401).json({ message: '未ログイン' });
-    }
-
-    // 1. タスクの更新
-    const updateTasksSql = 'UPDATE tasks SET category_id = NULL WHERE category_id = ? AND user_id = ?';
-    connection.query(updateTasksSql, [categoryId, userId], (err) => {
-        if (err) {
-            console.error('DB Error (Update Tasks):', err); // Renderのログに表示されます
-            return res.status(500).json({ message: 'タスクの更新に失敗しました', error: err });
-        }
-
-        // 2. カテゴリの削除
-        const deleteCategorySql = 'DELETE FROM categories WHERE category_id = ? AND user_id = ?';
-        connection.query(deleteCategorySql, [categoryId, userId], (err) => {
-            if (err) {
-                console.error('DB Error (Delete Category):', err); // Renderのログに表示されます
-                return res.status(500).json({ message: 'カテゴリの削除に失敗しました', error: err });
-            }
-            res.json({ success: true });
+// タスク追加（positionを最後尾に設定）
+app.post('/api/tasks', (req, res) => {
+    const { title, due_date, category } = req.body; 
+    if (!req.session.userId) return res.status(401).json({ message: '未ログイン' });
+    
+    // 現在の最大positionを取得して+1する
+    db.query('SELECT MAX(position) as maxPos FROM tasks WHERE user_id = ?', [req.session.userId], (err, results) => {
+        const nextPos = (results[0].maxPos || 0) + 1;
+        const sql = 'INSERT INTO tasks (user_id, title, due_date, category, position) VALUES (?, ?, ?, ?, ?)';
+        db.query(sql, [req.session.userId, title, due_date || null, category, nextPos], (err, result) => {
+            if (err) return res.status(500).json(err);
+            res.json({ success: true, taskId: result.insertId });
         });
     });
 });
 
-// --- タスク API ---
-app.get('/api/tasks', (req, res) => {
-    if (!req.session.userId) return res.status(401).json({ message: '未ログイン' });
-    const sql = `SELECT t.*, c.category_name FROM tasks t LEFT JOIN categories c ON t.category_id = c.category_id WHERE t.user_id = ? ORDER BY (status = 'completed'), due_date IS NULL, due_date ASC, CASE priority WHEN 'high' THEN 1 WHEN 'medium' THEN 2 WHEN 'low' THEN 3 END, created_at DESC`;
-    connection.query(sql, [req.session.userId], (err, results) => {
-        if (err) return res.status(500).json(err);
-        res.json(results);
-    });
-});
+// 並び順の保存（ドラッグ＆ドロップ用）
+app.patch('/api/tasks/reorder', (req, res) => {
+    const { ids } = req.body; // フロントから届いたIDの配列
+    if (!req.session.userId || !Array.isArray(ids)) return res.status(400).json({ success: false });
 
-app.post('/api/tasks', (req, res) => {
-    const { title, due_date, priority, category_id } = req.body; 
-    if (!req.session.userId) return res.status(401).json({ message: '未ログイン' });
-    const dateValue = due_date || null;
-    const catIdValue = category_id || null;
-    const sql = 'INSERT INTO tasks (user_id, title, due_date, priority, category_id) VALUES (?, ?, ?, ?, ?)';
-    connection.query(sql, [req.session.userId, title, dateValue, priority, catIdValue], (err, result) => {
-        if (err) return res.status(500).json(err);
-        res.json({ success: true, taskId: result.insertId });
+    // 各タスクのpositionを配列のインデックス順に更新
+    let completed = 0;
+    ids.forEach((id, index) => {
+        db.query('UPDATE tasks SET position = ? WHERE task_id = ? AND user_id = ?', [index, id, req.session.userId], (err) => {
+            completed++;
+            if (completed === ids.length) {
+                res.json({ success: true });
+            }
+        });
     });
 });
 
 app.put('/api/tasks/:id', (req, res) => {
-    const { title, due_date, priority, category_id } = req.body;
+    const { title, due_date, category } = req.body;
     if (!req.session.userId) return res.status(401).json({ message: '未ログイン' });
-    const sql = `UPDATE tasks SET title = ?, due_date = ?, priority = ?, category_id = ? WHERE task_id = ? AND user_id = ?`;
-    const dateValue = due_date || null;
-    const catIdValue = category_id || null;
-    connection.query(sql, [title, dateValue, priority, catIdValue, req.params.id, req.session.userId], (err) => {
+    const sql = 'UPDATE tasks SET title = ?, due_date = ?, category = ? WHERE task_id = ? AND user_id = ?';
+    db.query(sql, [title, due_date || null, category, req.params.id, req.session.userId], (err) => {
         if (err) return res.status(500).json(err);
         res.json({ success: true });
     });
@@ -213,7 +145,7 @@ app.put('/api/tasks/:id', (req, res) => {
 app.patch('/api/tasks/:id', (req, res) => {
     const { status } = req.body;
     const sql = 'UPDATE tasks SET status = ? WHERE task_id = ? AND user_id = ?';
-    connection.query(sql, [status, req.params.id, req.session.userId], (err) => {
+    db.query(sql, [status, req.params.id, req.session.userId], (err) => {
         if (err) return res.status(500).json(err);
         res.json({ success: true });
     });
@@ -221,7 +153,7 @@ app.patch('/api/tasks/:id', (req, res) => {
 
 app.delete('/api/tasks/:id', (req, res) => {
     const sql = 'DELETE FROM tasks WHERE task_id = ? AND user_id = ?';
-    connection.query(sql, [req.params.id, req.session.userId], (err) => {
+    db.query(sql, [req.params.id, req.session.userId], (err) => {
         if (err) return res.status(500).json(err);
         res.json({ success: true });
     });
