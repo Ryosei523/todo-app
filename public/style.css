@@ -200,10 +200,26 @@ button:active { transform: scale(0.95); } /* 押し込み時の動き */
 /* --- 8. スマホ表示最適化 --- */
 @media (max-width: 480px) {
     .container { width: 96%; padding: 10px; margin: 10px auto; }
+
+    /* 日付入力欄を左寄せにする設定 */
+    input[type="date"] {
+        justify-content: flex-start !important; /* 中央ではなく左端から並べる */
+        text-align: left !important;            /* 文字自体も左寄せ */
+        padding-left: 12px !important;          /* 左側に余白を作る */
+    }
+
+    /* 「年 / 月 / 日」のガイド文字も左側に固定 */
+    input[type="date"]::before {
+        left: 12px !important;                  /* 左端から12pxの位置に配置 */
+        transform: translateY(-50%) !important;  /* 上下の中央位置は維持 */
+    }
+
+    /* 入力項目の高さをスマホ用に調整 */
     .task-input-card input, 
     .task-input-card select, 
     .category-row-wrapper { 
         height: 52px !important; 
+        font-size: 16px !important;
     }
 }
 
