@@ -111,16 +111,13 @@ function renderTasks(tasks) {
         </div>
         <div class="task-bottom-row">
             <button class="edit-btn" onclick="openEditModal(${taskData})">編集</button>
-            <button class="delete-btn" onclick="deleteTask(${task.task_id})">×</button>
         </div>
         `;
         taskList.appendChild(li);
     });
 }
 document.getElementById('add-task-btn').addEventListener('click', async () => {
-    const title = document.getElementById('new-task-title').value;
-    const date = document.getElementById('new-task-date').value;
-    const category = document.getElementById('new-task-category').value;
+    const id = document.getElementById('edit-task-id').value;
     if (!title) return;
     await fetch('/api/tasks', {
         method: 'POST',

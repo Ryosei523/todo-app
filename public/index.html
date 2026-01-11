@@ -71,10 +71,16 @@
     </div>
 
     <div id="edit-modal" class="modal hidden">
-        <div class="modal-content card">
-            <h3>タスクを編集</h3>
+        <div class="modal-overlay" onclick="closeModal()"></div> <div class="modal-content card"></div>
+            <div class="modal-content card">
+                <h3>タスクを編集</h3>
+                <button id="modal-delete-btn" class="danger-link">このタスクを削除</button>
+            <div>
+
             <input type="hidden" id="edit-task-id">
             <input type="text" id="edit-task-title" placeholder="タスク名">
+
+
             <div class="edit-options" style="display: flex; flex-direction: column; gap: 10px; margin: 15px 0;">
                 <select id="edit-task-category">
                     <option value="仕事・学習">仕事・学習</option>
@@ -86,7 +92,7 @@
                 <input type="date" id="edit-task-date">
             </div>
             <div class="modal-buttons" style="display: flex; justify-content: flex-end; gap: 10px;">
-                <button id="save-edit-btn">保存</button>
+                <button id="save-edit-btn">保存する</button>
                 <button onclick="closeModal()" class="secondary">キャンセル</button>
             </div>
         </div>

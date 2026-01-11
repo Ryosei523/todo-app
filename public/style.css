@@ -1,4 +1,4 @@
-/* --- 1. テーマ変数（白黒切り替え） --- */
+/* --- 1. テーマ変数 --- */
 :root {
     --bg: #ffffff;
     --text: #000000;
@@ -32,7 +32,7 @@ body {
 
 .hidden { display: none !important; }
 
-/* --- 3. ヘッダー（To Doとボタンの横並び） --- */
+/* --- 3. ヘッダー --- */
 header {
     display: flex;
     justify-content: space-between;
@@ -60,7 +60,7 @@ header h1 {
     margin: 0 !important;
 }
 
-/* --- 4. フォーム要素（入力欄の大型化） --- */
+/* --- 4. フォーム要素 --- */
 input, select, button { 
     width: 100%; 
     height: 48px; 
@@ -73,19 +73,12 @@ input, select, button {
     box-sizing: border-box;
 }
 
-#new-task-category, 
-#new-task-date {
+#new-task-category, #new-task-date {
     height: 65px !important; 
     font-size: 18px !important;
     font-weight: bold;
     padding: 0 20px;
     border: 2px solid var(--border);
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
 }
 
 button { 
@@ -99,21 +92,7 @@ button {
 
 button:active { transform: scale(0.98); }
 
-/* --- 5. タスクリスト（1行レイアウト・調整版） --- */
-.card { 
-    background: var(--card); 
-    padding: 20px; 
-    border-radius: 16px; 
-    margin-bottom: 20px; 
-    border: 1px solid var(--border); 
-}
-
-#task-list {
-    padding: 0;
-    list-style: none;
-    margin-top: 20px;
-}
-
+/* --- 5. タスクリスト（編集ボタンのみ） --- */
 .task-item {
     width: 100% !important;
     height: 55px !important;
@@ -146,13 +125,12 @@ button:active { transform: scale(0.98); }
     flex-grow: 1;
 }
 
-/* カテゴリと日付：間隔を広げて読みやすく */
 .task-category {
     font-weight: bold;
     font-size: 13px;
     opacity: 0.8;
     white-space: nowrap;
-    margin-right: 15px; /* ここで隙間を確保 */
+    margin-right: 15px;
 }
 
 .task-date {
@@ -162,16 +140,7 @@ button:active { transform: scale(0.98); }
     white-space: nowrap;
 }
 
-/* ボタンエリア：重心を少し下げる */
-.task-bottom-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-left: 10px;
-    transform: translateY(2px); /* 2px下にずらしてバランス調整 */
-}
-
-.edit-btn, .delete-btn {
+.edit-btn {
     background-color: #ffffff !important;
     color: #000000 !important;
     border: 1px solid var(--border) !important;
@@ -179,89 +148,70 @@ button:active { transform: scale(0.98); }
     width: auto !important;
     padding: 0 12px !important;
     border-radius: 8px !important;
+    font-size: 12px !important;
+    font-weight: bold;
+}
+
+[data-theme="dark"] .edit-btn {
+    background-color: #222222 !important;
+    color: #ffffff !important;
+    border-color: #444444 !important;
+}
+
+/* --- 6. モーダル：中央配置とオーバーレイ --- */
+.modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    cursor: pointer;
 }
 
-.edit-btn {
-    font-size: 12px !important;
+.modal-overlay {
+    position: absolute;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
 }
 
-/* ×ボタン：サイズを大きく、太く強調 */
-.delete-btn {
-    font-size: 25px !important; 
-    font-weight: 900 !important;
+.modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    background: var(--bg);
+    padding: 25px;
+    border-radius: 20px;
+    z-index: 1001;
+    border: 1px solid var(--border);
 }
 
-/* ダークモード時のボタン色調整 */
-[data-theme="dark"] .edit-btn, 
-[data-theme="dark"] .delete-btn {
-    background-color: #222222 !important;
-    color: #ffffff !important;
-    border-color: #444444 !important;
-}
-
-/* --- 6. その他・ユーティリティ --- */
-.user-label {
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--text);
-    margin-right: 12px;
-    display: inline-block;
-    white-space: nowrap;
-}
-
-.filter-tabs {
+.modal-header {
     display: flex;
-    gap: 8px;
-    margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.tab-btn {
-    flex: 1;
-    height: 55px !important;
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 12px;
+.modal-header h3 { margin: 0; }
+
+/* モーダル内削除ボタン（赤いテキスト） */
+.modal-delete-link {
+    background: none !important;
+    color: #ff4d4d !important;
+    width: auto !important;
+    height: auto !important;
+    font-size: 14px !important;
+    text-decoration: underline;
+    padding: 0 !important;
+    margin: 0 !important;
     font-weight: bold;
-    font-size: 15px;
-    cursor: pointer;
 }
 
-.tab-btn.active {
-    border: 3px solid #000000 !important;
-    background-color: #f0f0f0 !important;
-}
-
-[data-theme="dark"] .tab-btn {
-    background-color: #222222 !important;
-    color: #ffffff !important;
-    border-color: #444444 !important;
-}
-
-.task-input-card input,
-.task-input-card select,
-.task-input-card button {
-    height: 55px !important;
-    box-sizing: border-box !important;
-    border-radius: 12px;
-}
-
-#add-task-btn {
-    background-color: #0056b3 !important;
-    color: white !important;
-    border: none !important;
-}
-
-#new-task-category, #new-task-date {
-    height: 53px !important;
-}
-
-.task-item.completed .task-title {
-    text-decoration: line-through;
-    opacity: 0.5;
-}
+/* --- 7. その他 --- */
+.filter-tabs { display: flex; gap: 8px; margin-bottom: 10px; }
+.tab-btn { flex: 1; height: 55px !important; border-radius: 12px; font-weight: bold; background: #fff; color: #000; border: 1px solid var(--border); }
+.tab-btn.active { border: 3px solid #000; background: #f0f0f0; }
+#add-task-btn { background-color: #0056b3 !important; color: white !important; }
+#new-task-category, #new-task-date { height: 53px !important; }
