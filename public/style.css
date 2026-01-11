@@ -230,40 +230,39 @@ button:active { transform: scale(0.98); }
     font-weight: bold;
 }
 
-
-/* --- 2. カテゴリの矢印（くみたいなマーク）を大きくする --- */
-/* デフォルトの矢印を消して、大きなSVGアイコンを背景として設定します */
+/* --- 2. カテゴリの選択枠（高さを50pxに調整） --- */
 #new-task-category {
-    appearance: none; /* 標準のスタイル（矢印）を無効化 */
-    -webkit-appearance: none; /* Safari, Chrome用 */
+    appearance: none; 
+    -webkit-appearance: none;
+    height: 50px !important; /* 55pxから50pxに縮小 */
+    box-sizing: border-box !important;
     
-    /* 大きな矢印アイコンを背景画像として設定 */
+    /* アイコンも50pxに合わせて少しだけ小さく調整 (24px → 20px) */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23999'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 15px center; /* 右端から15pxの位置に配置 */
-    background-size: 24px 24px; /* カレンダーアイコンと同じくらいの大きさに */
-    padding-right: 45px; /* 文字が矢印と重ならないように右に余白を空ける */
-    background-color: var(--bg); /* 背景色を明示 */
+    background-position: right 15px center; 
+    background-size: 20px 20px; 
+    padding-right: 45px;
+    background-color: var(--bg);
 }
 
+/* --- 3. 日付入力枠とカレンダーアイコン（高さを50pxに調整） --- */
+#new-task-date {
+    height: 50px !important; /* 55pxから50pxに縮小 */
+    box-sizing: border-box !important;
+    position: relative;
+    padding-right: 45px;
+}
 
-/* --- 3. スマホでもカレンダーアイコンを表示させる --- */
-/* ブラウザ標準のカレンダーアイコンのスタイルを調整します */
+/* スマホ・PC共通のカレンダーアイコン調整 */
 input[type="date"]::-webkit-calendar-picker-indicator {
-    display: block;          /* 確実に表示させる */
-    width: 24px;             /* 幅を大きく */
-    height: 24px;            /* 高さを大きく */
-    cursor: pointer;         /* カーソルを指マークに */
-    opacity: 0.6;            /* 少し薄くして主張しすぎないように（お好みで調整可） */
-    /* スマホでのタップ領域を広げるための調整 */
+    display: block;
+    width: 20px; /* 高さ50pxに合わせてサイズを微調整 */
+    height: 20px;
+    cursor: pointer;
+    opacity: 0.6;
     position: absolute;
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
-}
-
-/* input[type="date"] 自体にも少し調整が必要です */
-#new-task-date {
-    position: relative; /* アイコンの位置調整の基準にする */
-    padding-right: 45px; /* アイコンと重ならないよう右に余白 */
 }
