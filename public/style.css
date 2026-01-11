@@ -266,3 +266,84 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     top: 50%;
     transform: translateY(-50%);
 }
+
+#task-list {
+    padding: 0;
+    list-style: none;
+    margin-top: 20px; /* 入力フォームとの間隔 */
+}
+
+.task-item {
+    /* 入力フォームと同じスタイルを適用 */
+    width: 100% !important;
+    height: 55px !important;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--card); /* 背景色はカードの色 */
+    color: var(--text);
+    box-sizing: border-box !important;
+    padding: 0 15px !important;
+    
+    /* 内部要素を横並びにする */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: grab;
+}
+
+/* タスクの左側（チェックボックス、タイトル、カテゴリ・日付） */
+.task-top-row {
+    display: flex;
+    align-items: center;
+    flex-grow: 1; /* 余ったスペースを埋める */
+    overflow: hidden; /* はみ出した部分を隠す */
+}
+
+/* タスク名 */
+.task-title {
+    font-weight: bold; /* 太文字にする */
+    margin: 0 10px; /* 左右の間隔 */
+    white-space: nowrap; /* 改行を防ぐ */
+    overflow: hidden;
+    text-overflow: ellipsis; /* 長すぎる場合は省略記号(...)を表示 */
+    flex-grow: 1;
+}
+
+/* カテゴリ・日付 */
+.task-top-row small {
+    font-weight: bold; /* カテゴリと日付も太文字に */
+    white-space: nowrap;
+    flex-shrink: 0; /* 縮小しないようにする */
+}
+
+/* タスクの右側（編集・削除ボタン） */
+.task-bottom-row {
+    display: flex;
+    align-items: center;
+    height: 100%; /* 高さを親要素に合わせる */
+}
+
+/* 編集・削除ボタン */
+.edit-btn, .delete-btn {
+    /* 入力フォームのボタンと同じスタイルを適用 */
+    background-color: var(--text) !important;
+    color: var(--bg) !important;
+    border: none !important;
+    font-weight: bold;
+    cursor: pointer;
+    height: 100% !important; /* 高さを親要素に合わせる */
+    width: auto !important;
+    padding: 0 15px !important;
+    border-radius: 0 !important; /* 角丸をリセット */
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 削除ボタンの右側の角丸を親要素に合わせる */
+.task-bottom-row .delete-btn {
+    border-top-right-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
+}
