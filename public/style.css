@@ -1,17 +1,16 @@
-/* --- 1. テーマ・基本変数 --- */
+/* --- 1. テーマ変数（白黒切り替え） --- */
 :root {
     --bg: #ffffff;
     --text: #000000;
     --card: #f8f9fa;
     --border: #dddddd;
     --accent: #000000;
-    --height-standard: 55px; /* すべての要素の統一高さ */
 }
 
 [data-theme="dark"] {
     --bg: #000000;
     --text: #ffffff;
-    --card: #111111;
+    --card: #1a1a1a;
     --border: #333333;
     --accent: #ffffff;
 }
@@ -20,15 +19,20 @@
 body { 
     background-color: var(--bg); 
     color: var(--text); 
-    transition: 0.3s ease; 
+    transition: background-color 0.3s, color 0.3s; 
     font-family: 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
 }
 
-.container { max-width: 500px; margin: 40px auto; padding: 20px; }
+.container { 
+    max-width: 500px; 
+    margin: 40px auto; 
+    padding: 20px; 
+}
+
 .hidden { display: none !important; }
 
-/* --- 3. ヘッダー（名前・テーマ・ログアウト） --- */
+/* --- 3. ヘッダー（To Doとボタンの横並び） --- */
 header {
     display: flex;
     justify-content: space-between;
@@ -36,72 +40,85 @@ header {
     margin-bottom: 30px;
 }
 
-header h1 { margin: 0; font-size: 26px; }
+header h1 {
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: -1px;
+}
 
 .header-right {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
-/* 登録した名前を小さく配置 */
-#display-name {
-    font-size: 12px;
-    opacity: 0.7;
-    margin-right: 4px;
-}
-
+/* ヘッダー内ボタンのスリム化 */
 .header-right button {
     width: auto !important;
-    height: 34px !important; /* ヘッダーボタンはあえて控えめに */
-    padding: 0 12px !important;
-    font-size: 12px !important;
+    height: 36px !important;
+    padding: 0 15px !important;
+    font-size: 13px !important;
     margin: 0 !important;
 }
 
-/* --- 4. フォーム・タスク枠の完全統一（高さ55px） --- */
-input, select, .task-input-card button, .task-item { 
-    width: 100% !important; 
-    height: var(--height-standard) !important; 
+/* --- 4. フォーム要素（入力欄の大型化） --- */
+input, select, button { 
+    width: 100%; 
+    height: 48px; 
     margin-bottom: 12px; 
-    border-radius: 12px; 
+    border-radius: 10px; 
     border: 1px solid var(--border); 
     background: var(--bg); 
     color: var(--text); 
     font-size: 16px;
-    box-sizing: border-box !important;
+    box-sizing: border-box;
 }
 
-/* カテゴリの矢印を大きく強調 */
-select {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-    background-size: 24px;
-    padding-right: 45px !important;
+/* カテゴリと日付を特に大きく強調 */
+#new-task-category, 
+#new-task-date {
+    height: 65px !important; 
+    font-size: 18px !important;
+    font-weight: bold;
+    padding: 0 20px;
+    border: 2px solid var(--border); /* 少し太くして存在感を出す */
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    width: 25px;
+    height: 25px;
     cursor: pointer;
 }
 
-/* ボタン設定 */
 button { 
     background: var(--text); 
     color: var(--bg); 
     border: none; 
     font-weight: bold; 
-    cursor: pointer;
+    cursor: pointer; 
+    transition: transform 0.1s;
 }
 
-/* --- 5. タスクリスト（1行レイアウト） --- */
-#task-list { padding: 0; list-style: none; }
+button:active { transform: scale(0.98); }
+
+/* --- 5. タスクリスト（ドラッグ対応） --- */
+.card { 
+    background: var(--card); 
+    padding: 20px; 
+    border-radius: 16px; 
+    margin-bottom: 20px; 
+    border: 1px solid var(--border); 
+}
 
 .task-item { 
     background: var(--card); 
-    padding: 0 15px !important; 
+    padding: 16px; 
+    margin-bottom: 12px; 
+    border-radius: 12px; 
+    border: 1px solid var(--border);
+    cursor: grab; 
     display: flex; 
-    align-items: center; /* 縦方向の中央揃え */
-    justify-content: space-between;
-    cursor: grab;
+    flex-direction: column; 
+    gap: 10px;
 }
 
 .task-item:active { cursor: grabbing; }
@@ -110,52 +127,39 @@ button {
     display: flex; 
     align-items: center; 
     gap: 12px; 
-    flex: 1;
-    overflow: hidden;
 }
 
-.task-title {
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* 長いタイトルを...で省略 */
+.task-bottom-row { 
+    display: flex; 
+    justify-content: flex-end; 
+    gap: 8px; 
 }
 
-.task-meta {
-    font-size: 11px;
-    opacity: 0.6;
-    white-space: nowrap;
-    margin-left: 5px;
-}
-
-/* 編集・削除ボタン（1行の中に配置） */
-.task-bottom-row {
-    display: flex;
-    gap: 8px;
-    margin-left: 10px;
-}
-
+/* 編集・削除ボタンはスリムに */
 .edit-btn, .delete-btn {
-    width: auto !important;
-    height: 32px !important;
-    padding: 0 10px !important;
-    font-size: 11px !important;
-    margin: 0 !important;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
+    width: auto;
+    height: 32px;
+    padding: 0 12px;
+    font-size: 12px;
 }
 
-/* --- 6. ユーティリティ・ゲージ --- */
-.progress-container { background: var(--border); height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 25px; }
-.progress-fill { background: #28a745; height: 100%; transition: width 0.6s ease; }
-.sortable-ghost { opacity: 0.3; }
+/* --- 6. その他・ユーティリティ --- */
+.sortable-ghost { opacity: 0.2; }
+
+.progress-container { 
+    background: var(--border); 
+    height: 10px; 
+    border-radius: 5px; 
+    overflow: hidden; 
+}
+
+.progress-fill { 
+    background: #28a745; 
+    height: 100%; 
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+}
 
 .task-item.completed .task-title {
     text-decoration: line-through;
     opacity: 0.5;
-}
-
-@media (max-width: 480px) {
-    .container { padding: 10px; }
 }
