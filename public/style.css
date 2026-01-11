@@ -199,8 +199,8 @@ button:active { transform: scale(0.95); }
 .delete-btn { 
     font-size: 24px !important; 
     font-weight: 900 !important; 
-    color: #ff4d4d !important;
-    background: none !important;
+    color: #999 !important;
+    background: #f0f2f5 !important;
     padding: 5px 10px !important;
     line-height: 1 !important;
 }
@@ -274,8 +274,8 @@ button:active { transform: scale(0.95); }
 
 /* 削除ボタンの調整 */
 .cat-delete-btn { 
-    background-color: #ff4d4d; 
-    color: white; 
+    background-color: #f0f2f5; 
+    color: #666; 
     padding: 8px 16px !important; 
     border-radius: 8px; 
     font-size: 13px;
@@ -319,6 +319,19 @@ button:active { transform: scale(0.95); }
     justify-content: flex-end !important; /* 全て右寄せ */
     gap: 15px; /* ボタン同士を離す */
     margin-top: 25px;
+}
+
+/* チェックされたタスクのタイトルに線を引く */
+.task-item.completed .task-title {
+    text-decoration: line-through !important; /* 打ち消し線を引く */
+    color: #999 !important;                   /* 文字色を薄くする */
+    opacity: 0.7;                             /* 全体的に少し透明にして完了感を出す */
+    transition: all 0.3s ease;                /* 変化を滑らかに */
+}
+
+/* チェックされた項目の背景も少し暗くするとより分かりやすいです */
+.task-item.completed {
+    background-color: #fafafa !important;
 }
 /* 進捗バー */
 .progress-container { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; margin: 15px 0; }
