@@ -81,17 +81,17 @@
             <h3>タスクを編集</h3>
             <input type="hidden" id="edit-task-id">
             <input type="text" id="edit-task-title" placeholder="タスク名">
-            <div class="edit-options">
+            <div class="edit-options" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
                 <select id="edit-task-category">
                     <option value="">カテゴリなし</option>
                 </select>
                 <input type="date" id="edit-task-date">
+                <select id="edit-task-priority">
+                    <option value="low">低</option>
+                    <option value="medium">中</option>
+                    <option value="high">高</option>
+                </select>
             </div>
-            <select id="edit-task-priority">
-                <option value="low">低</option>
-                <option value="medium">中</option>
-                <option value="high">高</option>
-            </select>
             <div class="modal-buttons">
                 <button id="save-edit-btn">保存</button>
                 <button onclick="closeModal()" class="secondary">キャンセル</button>
@@ -108,7 +108,7 @@
             </div>
             <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
             <h4>登録済みのカテゴリ</h4>
-            <div id="category-manage-list" style="margin: 15px 0; max-height: 200px; overflow-y: auto;"></div>
+            <div id="category-manage-list"></div>
             <div class="modal-buttons">
                 <button onclick="closeCategoryModal()" class="secondary">閉じる</button>
             </div>
