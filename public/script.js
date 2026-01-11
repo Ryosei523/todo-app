@@ -1,7 +1,7 @@
-// --- グローバル変数と初期設定 ---
+// --- 1. グローバル変数と初期設定 ---
 let currentFilter = 'all';
 
-// ブラウザ通知の許可をリクエスト
+// ブラウザ通知の許可
 if ("Notification" in window) {
     if (Notification.permission !== "granted" && Notification.permission !== "denied") {
         Notification.requestPermission();
@@ -28,7 +28,7 @@ const editTaskCategory = document.getElementById('edit-task-category');
 
 checkLogin();
 
-// --- 認証系 ---
+// --- 2. 認証系ロジック ---
 async function checkLogin() {
     const res = await fetch('/api/user');
     const data = await res.json();
@@ -53,7 +53,7 @@ function showAuth() {
     appScreen.classList.add('hidden');
 }
 
-// 登録・ログイン・ログアウトのリスナー
+// 登録・ログイン・ログアウト
 document.getElementById('reg-btn').addEventListener('click', async () => {
     const username = document.getElementById('reg-user').value;
     const password = document.getElementById('reg-pass').value;
@@ -85,17 +85,13 @@ document.getElementById('logout-btn').addEventListener('click', async () => {
     showAuth();
 });
 
-// --- カテゴリ操作系 ---
-
+// --- 3. カテゴリ操作系 ---
 async function fetchCategories() {
     try {
         const response = await fetch('/api/categories');
-        if (!response.ok) return console.error('カテゴリの取得に失敗しました');
-
         const categories = await response.json();
         if (!Array.isArray(categories)) return;
 
-        // 1. タスク作成・編集用のプルダウンを更新
         const updateSelect = (selectEl) => {
             selectEl.innerHTML = '<option value="">カテゴリなし</option>';
             categories.forEach(cat => {
@@ -108,7 +104,6 @@ async function fetchCategories() {
         updateSelect(newTaskCategory);
         updateSelect(editTaskCategory);
 
-        // 2. カテゴリ管理用リストを更新（削除ボタン付き）
         const categoryListContainer = document.getElementById('category-manage-list');
         if (categoryListContainer) {
             categoryListContainer.innerHTML = '';
@@ -127,16 +122,10 @@ async function fetchCategories() {
     }
 }
 
-// カテゴリ削除関数
 window.deleteCategory = async (id) => {
-    if (!confirm('このカテゴリを削除しますか？紐付いているタスクのカテゴリは解除されます。')) return;
+    if (!confirm('このカテゴリを削除しますか？')) return;
     const res = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
-    if (res.ok) {
-        fetchCategories();
-        fetchTasks();
-    } else {
-        alert('削除に失敗しました');
-    }
+    if (res.ok) { fetchCategories(); fetchTasks(); }
 };
 
 window.openCategoryModal = () => document.getElementById('category-modal').classList.remove('hidden');
@@ -145,20 +134,17 @@ window.closeCategoryModal = () => document.getElementById('category-modal').clas
 document.getElementById('save-category-btn').addEventListener('click', async () => {
     const name = document.getElementById('new-category-name').value;
     if (!name) return;
-
     await fetch('/api/categories', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ category_name: name })
     });
-    
     document.getElementById('new-category-name').value = '';
     closeCategoryModal();
     fetchCategories(); 
 });
 
-// --- タスク操作系 ---
-
+// --- 4. タスク操作系（2行構成のレンダリング） ---
 async function fetchTasks() {
     const res = await fetch('/api/tasks');
     const tasks = await res.json();
@@ -177,6 +163,8 @@ function renderTasks(tasks) {
     const completedCount = tasks.filter(t => t.status === 'completed').length;
     document.getElementById('total-count').textContent = total;
     document.getElementById('completed-count').textContent = completedCount;
+    
+    // 進捗バーのアニメーション反映
     const percent = total > 0 ? (completedCount / total) * 100 : 0;
     document.getElementById('progress-fill').style.width = percent + '%';
 
@@ -197,28 +185,27 @@ function renderTasks(tasks) {
         const isOverdue = task.status === 'pending' && taskDate && taskDate < now;
 
         const li = document.createElement('li');
-        li.className = `task-item priority-${task.priority} ${task.status === 'completed' ? 'completed' : ''} ${isOverdue ? 'overdue' : ''}`;
+        li.className = `task-item ${task.status === 'completed' ? 'completed' : ''} ${isOverdue ? 'overdue' : ''}`;
         
         const dateStr = task.due_date ? new Date(task.due_date).toLocaleDateString() : '';
         const priorityLabel = getPriorityLabel(task.priority);
         const taskData = JSON.stringify(task).replace(/"/g, '&quot;');
         
+        // ★ 二行構成のHTML構造 ★
         li.innerHTML = `
-            <div class="task-left">
+            <div class="task-top-row">
                 <input type="checkbox" ${task.status === 'completed' ? 'checked' : ''} onchange="toggleTask(${task.task_id}, this.checked)">
-                <div class="task-info">
-                    <span class="task-title">
-                        ${task.title}
-                        ${isOverdue ? '<span class="overdue-badge">期限切れ</span>' : ''}
-                    </span>
-                    <small class="task-meta">
-                        ${dateStr ? `📅 ${dateStr} ` : ''} 
-                        ${priorityLabel}
-                        ${task.category_name ? ` <span class="cat-tag">🏷️ ${task.category_name}</span>` : ''}
-                    </small>
-                </div>
+                <span class="task-title">
+                    ${task.title}
+                    ${isOverdue ? '<span class="overdue-badge">期限切れ</span>' : ''}
+                </span>
+                <small class="task-meta">
+                    ${priorityLabel}
+                    ${dateStr ? ` 📅${dateStr}` : ''}
+                    ${task.category_name ? ` <span class="cat-tag">🏷️${task.category_name}</span>` : ''}
+                </small>
             </div>
-            <div class="task-right">
+            <div class="task-bottom-row">
                 <button class="edit-btn" onclick="openEditModal(${taskData})">編集</button>
                 <button class="delete-btn" onclick="deleteTask(${task.task_id})">×</button>
             </div>
@@ -233,6 +220,7 @@ function getPriorityLabel(p) {
     return '<span>🌱 低</span>';
 }
 
+// --- リマインダー・追加・更新・削除 ---
 async function checkReminders() {
     if (Notification.permission !== "granted") return;
     const res = await fetch('/api/tasks');
@@ -249,20 +237,13 @@ document.getElementById('add-task-btn').addEventListener('click', async () => {
     const date = newTaskDate.value;
     const priority = newTaskPriority.value;
     const category_id = newTaskCategory.value;
-
     if (!title) return;
-
     await fetch('/api/tasks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, due_date: date, priority, category_id })
     });
-    
-    newTaskInput.value = '';
-    newTaskDate.value = '';
-    newTaskPriority.value = 'medium';
-    newTaskCategory.value = '';
-    fetchTasks();
+    newTaskInput.value = ''; newTaskDate.value = ''; fetchTasks();
 });
 
 window.toggleTask = async (id, isChecked) => {
@@ -298,19 +279,11 @@ document.getElementById('save-edit-btn').addEventListener('click', async () => {
     const due_date = editTaskDate.value;
     const priority = editTaskPriority.value;
     const category_id = editTaskCategory.value;
-
     if (!title) return alert('タイトルは必須です');
-
     const res = await fetch(`/api/tasks/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, due_date, priority, category_id })
     });
-
-    if (res.ok) {
-        closeModal();
-        fetchTasks();
-    } else {
-        alert('更新に失敗しました');
-    }
+    if (res.ok) { closeModal(); fetchTasks(); }
 });

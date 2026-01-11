@@ -160,35 +160,56 @@ button:active { transform: scale(0.95); }
 
 .task-item { 
     background: white; 
-    padding: 15px 20px; 
+    padding: 20px; 
     border-radius: 12px; 
     margin-bottom: 12px; 
     display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
+    flex-direction: column; /* 二行にするために縦方向に並べる */
+    gap: 15px;              /* 一行目と二行目の間隔 */
     box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
     border-left: 6px solid #ddd;
-    /* 幅を100%に固定し、余計な左右マージンを消す */
     width: 100% !important; 
-    margin-left: 0 !important;
-    margin-right: 0 !important;
     box-sizing: border-box !important;
 }
 
+/* 一行目：チェック・名前・優先度を横並び */
+.task-top-row {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* 要素同士の横の間隔 */
+    width: 100%;
+}
+
+/* 二行目：編集・×ボタンを右寄せ */
+.task-bottom-row {
+    display: flex;
+    justify-content: flex-end; /* 右端に寄せる */
+    gap: 12px;                 /* ボタン同士の間隔を少し開ける */
+    width: 100%;
+}
+
+/* チェックボックス（四角）のサイズ調整 */
+.task-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* 削除ボタンの「×」を太く大きくする */
+.delete-btn { 
+    font-size: 24px !important; 
+    font-weight: 900 !important; 
+    color: #ff4d4d !important;
+    background: none !important;
+    padding: 5px 10px !important;
+    line-height: 1 !important;
+}
 /* 左側のチェックボックス、タスク名、優先度を一直線に並べる */
 .task-info {
     display: flex;
     align-items: center;
     gap: 12px; /* 要素同士の間隔 */
     flex: 1;   /* 右側のボタンを端に追いやる */
-}
-
-/* チェックボックス自体のサイズ微調整 */
-.task-item input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    margin: 0;
 }
 
 /* タスク名と優先度を横並びにする */
