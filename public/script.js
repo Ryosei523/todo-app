@@ -1,5 +1,6 @@
 // --- 初期設定と画面切り替え ---
-let currentFilter = 'all';
+let currentFilter = 'all'; // 現在のフィルター状態
+let currentTasks = [];    // 取得した全タスクを保持する変数
 const authScreen = document.getElementById('auth-screen');
 const appScreen = document.getElementById('app-screen');
 const taskList = document.getElementById('task-list');
@@ -15,6 +16,19 @@ function showAuth() {
     authScreen.classList.remove('hidden');
     appScreen.classList.add('hidden');
 }
+
+// --- フィルターボタンの処理を追加 ---
+window.setFilter = (filter) => {
+    currentFilter = filter;
+    
+    // ボタンの見た目（activeクラス）を切り替え
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    if (filter === 'all') document.getElementById('filter-all').classList.add('active');
+    if (filter === 'pending') document.getElementById('filter-pending').classList.add('active');
+    if (filter === 'completed') document.getElementById('filter-completed').classList.add('active');
+
+    renderTasks(currentTasks); // 再描画
+};
 
 // --- ドラッグ＆ドロップ設定 ---
 new Sortable(taskList, {
@@ -78,32 +92,37 @@ document.getElementById('logout-btn').addEventListener('click', async () => {
 // --- タスク操作 ---
 async function fetchTasks() {
     const res = await fetch('/api/tasks');
-    const tasks = await res.json();
-    renderTasks(tasks);
+    currentTasks = await res.json(); // 全データを一旦保持
+    renderTasks(currentTasks);
 }
 
 function renderTasks(tasks) {
-    // --- 1. カウントとゲージの更新 ---
+    // --- 1. カウントとゲージの更新（常に全件を元に計算） ---
     const total = tasks.length;
     const completedCount = tasks.filter(t => t.status === 'completed').length;
     
-    // 数字を画面に反映させる
     const totalEl = document.getElementById('total-count');
     const completedEl = document.getElementById('completed-count');
     if (totalEl) totalEl.textContent = total;
     if (completedEl) completedEl.textContent = completedCount;
 
-    // ゲージの幅を更新
     const progressFill = document.getElementById('progress-fill');
     if (progressFill) {
         progressFill.style.width = (total > 0 ? (completedCount / total) * 100 : 0) + '%';
     }
 
-    // --- 2. リストの描画（以前のまま） ---
+    // --- 2. フィルターに基づいて表示するタスクを絞り込む ---
+    const filteredTasks = tasks.filter(task => {
+        if (currentFilter === 'pending') return task.status === 'pending';
+        if (currentFilter === 'completed') return task.status === 'completed';
+        return true;
+    });
+
+    // --- 3. リストの描画 ---
     const taskList = document.getElementById('task-list');
     taskList.innerHTML = '';
 
-    tasks.forEach(task => {
+    filteredTasks.forEach(task => {
         const dateStr = task.due_date ? new Date(task.due_date).toLocaleDateString() : '';
         const taskData = JSON.stringify(task).replace(/"/g, '&quot;'); 
         
@@ -127,7 +146,8 @@ function renderTasks(tasks) {
         taskList.appendChild(li);
     });
 }
-// ★修正：タスク追加ロジック (ReferenceErrorを解消)
+
+// タスク追加
 document.getElementById('add-task-btn').addEventListener('click', async () => {
     const title = document.getElementById('new-task-title').value;
     const date = document.getElementById('new-task-date').value;
@@ -184,7 +204,7 @@ document.getElementById('save-edit-btn').addEventListener('click', async () => {
     fetchTasks();
 });
 
-// ★追加：モーダル内：削除処理
+// モーダル内：削除処理
 document.getElementById('modal-delete-btn').onclick = async () => {
     const id = document.getElementById('edit-task-id').value;
     if (!confirm('このタスクを完全に削除しますか？')) return;
