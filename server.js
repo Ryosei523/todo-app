@@ -1,3 +1,65 @@
+// --- ファイルの冒頭に追加：データベース初期化 ---
+async function initializeDB() {
+    try {
+        // position列があるか確認し、なければ追加する
+        const [columns] = await db.query("SHOW COLUMNS FROM tasks LIKE 'position'");
+        if (columns.length === 0) {
+            await db.query("ALTER TABLE tasks ADD COLUMN position INT DEFAULT 0");
+            console.log("データベースにposition列を追加しました");
+        }
+    } catch (err) {
+        console.error("DB初期化エラー:", err);
+    }
+}
+initializeDB();
+
+// --- タスク取得APIを修正（position順に並べる） ---
+app.get('/api/tasks', async (req, res) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM tasks WHERE user_id = ? ORDER BY position ASC', [req.session.userId]);
+        res.json(rows);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+// --- 追加：並び順を保存するAPI ---
+app.patch('/api/tasks/reorder', async (req, res) => {
+    const { ids } = req.body; // フロントから届いたIDの配列
+    try {
+        const queries = ids.map((id, index) => {
+            return db.query('UPDATE tasks SET position = ? WHERE task_id = ? AND user_id = ?', [index, id, req.session.userId]);
+        });
+        await Promise.all(queries);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+// AivenのDBに自動で列を追加する設定
+async function initializeDB() {
+    try {
+        const [columns] = await db.query("SHOW COLUMNS FROM tasks LIKE 'position'");
+        if (columns.length === 0) {
+            await db.query("ALTER TABLE tasks ADD COLUMN position INT DEFAULT 0");
+            console.log("position列を自動追加しました");
+        }
+    } catch (err) { console.error("DB初期化エラー:", err); }
+}
+initializeDB();
+
+// 並び順保存用のAPI
+app.patch('/api/tasks/reorder', async (req, res) => {
+    const { ids } = req.body;
+    try {
+        const queries = ids.map((id, index) => {
+            return db.query('UPDATE tasks SET position = ? WHERE task_id = ? AND user_id = ?', [index, id, req.session.userId]);
+        });
+        await Promise.all(queries);
+        res.json({ success: true });
+    } catch (err) { res.status(500).send(err); }
+});
 const express = require('express');
 const mysql = require('mysql2');
 const session = require('express-session');
