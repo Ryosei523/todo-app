@@ -7,17 +7,43 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
-    <div id="app-screen" class="container">
+
+    <div id="auth-screen" class="container">
+        <h1>To Do</h1>
+        <div class="card">
+            <h2>ログイン</h2>
+            <input type="text" id="login-user" placeholder="ユーザー名">
+            <input type="password" id="login-pass" placeholder="パスワード">
+            <button id="login-btn">ログイン</button>
+        </div>
+        <div class="card">
+            <h2>新規登録</h2>
+            <input type="text" id="reg-user" placeholder="ユーザー名">
+            <input type="password" id="reg-pass" placeholder="パスワード">
+            <button id="reg-btn" class="secondary">登録</button>
+        </div>
+        <p id="msg" style="text-align: center;"></p>
+    </div>
+
+    <div id="app-screen" class="container hidden">
         <header>
             <h1>To Do</h1>
             <div class="header-right">
-                <button id="theme-toggle">🌓 テーマ切替</button>
+                <button id="theme-toggle" class="subtle-btn">🌓 テーマ切替</button>
                 <button id="logout-btn" class="danger">ログアウト</button>
             </div>
         </header>
+
         <div class="stats-bar card">
-            <div class="progress-container"><div id="progress-fill" class="progress-fill"></div></div>
+            <div class="stats-info">
+                <span>全タスク: <b id="total-count">0</b></span>
+                <span>完了済: <b id="completed-count">0</b></span>
+            </div>
+            <div class="progress-container">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
         </div>
+
         <main>
             <div class="card task-input-card">
                 <input type="text" id="new-task-title" placeholder="タスク名">
@@ -31,9 +57,33 @@
                 <input type="date" id="new-task-date">
                 <button id="add-task-btn">タスクを追加</button>
             </div>
+            
             <ul id="task-list"></ul>
         </main>
     </div>
+
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-content card">
+            <h3>タスクを編集</h3>
+            <input type="hidden" id="edit-task-id">
+            <input type="text" id="edit-task-title" placeholder="タスク名">
+            <div class="edit-options" style="display: flex; flex-direction: column; gap: 10px; margin: 15px 0;">
+                <select id="edit-task-category">
+                    <option value="仕事・学習">仕事・学習</option>
+                    <option value="個人">個人</option>
+                    <option value="買い物">買い物</option>
+                    <option value="健康・運動">健康・運動</option>
+                    <option value="その他">その他</option>
+                </select>
+                <input type="date" id="edit-task-date">
+            </div>
+            <div class="modal-buttons" style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button id="save-edit-btn">保存</button>
+                <button onclick="closeModal()" class="secondary">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="script.js"></script>
 </body>

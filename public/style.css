@@ -11,3 +11,4 @@ button { background: var(--text); color: var(--bg); border: none; font-weight: b
 .sortable-ghost { opacity: 0.2; }
 .progress-container { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; }
 .progress-fill { background: #28a745; height: 100%; transition: width 0.5s; }
+.hidden { display: none !important; } /* これで auth と app を切り替えます */

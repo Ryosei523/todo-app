@@ -1,6 +1,21 @@
+// --- 初期設定と画面切り替え ---
+let currentFilter = 'all';
+const authScreen = document.getElementById('auth-screen');
+const appScreen = document.getElementById('app-screen');
 const taskList = document.getElementById('task-list');
 
-// ドラッグ＆ドロップ
+function showApp(username) {
+    authScreen.classList.add('hidden');
+    appScreen.classList.remove('hidden');
+    fetchTasks();
+}
+
+function showAuth() {
+    authScreen.classList.remove('hidden');
+    appScreen.classList.add('hidden');
+}
+
+// --- ドラッグ＆ドロップ設定 ---
 new Sortable(taskList, {
     animation: 150,
     ghostClass: 'sortable-ghost',
@@ -14,28 +29,139 @@ new Sortable(taskList, {
     }
 });
 
-// テーマ切り替え
+// --- テーマ切り替え ---
 document.getElementById('theme-toggle').addEventListener('click', () => {
     const body = document.body;
     const isDark = body.getAttribute('data-theme') === 'dark';
     body.setAttribute('data-theme', isDark ? 'light' : 'dark');
 });
 
-// タスク表示
+// --- 認証処理 ---
+async function checkLogin() {
+    const res = await fetch('/api/user');
+    const data = await res.json();
+    if (data.loggedIn) showApp(data.username);
+    else showAuth();
+}
+
+document.getElementById('login-btn').addEventListener('click', async () => {
+    const username = document.getElementById('login-user').value;
+    const password = document.getElementById('login-pass').value;
+    const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (data.success) showApp(username);
+    else alert(data.message);
+});
+
+document.getElementById('reg-btn').addEventListener('click', async () => {
+    const username = document.getElementById('reg-user').value;
+    const password = document.getElementById('reg-pass').value;
+    const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    alert(data.message);
+});
+
+document.getElementById('logout-btn').addEventListener('click', async () => {
+    await fetch('/api/logout', { method: 'POST' });
+    showAuth();
+});
+
+// --- タスク操作 ---
+async function fetchTasks() {
+    const res = await fetch('/api/tasks');
+    const tasks = await res.json();
+    renderTasks(tasks);
+}
+
 function renderTasks(tasks) {
+    const total = tasks.length;
+    const completedCount = tasks.filter(t => t.status === 'completed').length;
+    document.getElementById('total-count').textContent = total;
+    document.getElementById('completed-count').textContent = completedCount;
+    document.getElementById('progress-fill').style.width = (total > 0 ? (completedCount / total) * 100 : 0) + '%';
+
     taskList.innerHTML = '';
     tasks.forEach(task => {
         const li = document.createElement('li');
-        li.className = 'task-item';
+        li.className = `task-item ${task.status === 'completed' ? 'completed' : ''}`;
         li.dataset.id = task.task_id;
+        const dateStr = task.due_date ? new Date(task.due_date).toLocaleDateString() : '';
+        
         li.innerHTML = `
-            <div>
-                <input type="checkbox" ${task.status === 'completed' ? 'checked' : ''} onchange="toggleTask(${task.task_id}, this.checked)">
-                <span>${task.title}</span> <small>(${task.category})</small>
+            <div class="task-top-row">
+                <input type="checkbox" style="width:20px;height:20px;" ${task.status === 'completed' ? 'checked' : ''} onchange="toggleTask(${task.task_id}, this.checked)">
+                <span class="task-title">${task.title}</span>
+                <small>${task.category} ${dateStr}</small>
             </div>
-            <button onclick="deleteTask(${task.task_id})" style="width:auto;height:auto;padding:5px 10px;">×</button>
+            <div class="task-bottom-row">
+                <button class="edit-btn" onclick="openEditModal(${JSON.stringify(task).replace(/"/g, '&quot;')})">編集</button>
+                <button class="delete-btn" onclick="deleteTask(${task.task_id})">×</button>
+            </div>
         `;
         taskList.appendChild(li);
     });
 }
-// ※ 他の fetchTasks や toggleTask 関数は既存のままでOKです。
+
+document.getElementById('add-task-btn').addEventListener('click', async () => {
+    const title = document.getElementById('new-task-title').value;
+    const date = document.getElementById('new-task-date').value;
+    const category = document.getElementById('new-task-category').value;
+    if (!title) return;
+    await fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, due_date: date, category })
+    });
+    document.getElementById('new-task-title').value = '';
+    fetchTasks();
+});
+
+window.toggleTask = async (id, isChecked) => {
+    const status = isChecked ? 'completed' : 'pending';
+    await fetch(`/api/tasks/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+    });
+    fetchTasks();
+};
+
+window.deleteTask = async (id) => {
+    if (!confirm('削除しますか？')) return;
+    await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+    fetchTasks();
+};
+
+window.openEditModal = (task) => {
+    document.getElementById('edit-task-id').value = task.task_id;
+    document.getElementById('edit-task-title').value = task.title;
+    document.getElementById('edit-task-date').value = task.due_date ? task.due_date.split('T')[0] : '';
+    document.getElementById('edit-task-category').value = task.category;
+    document.getElementById('edit-modal').classList.remove('hidden');
+};
+
+window.closeModal = () => document.getElementById('edit-modal').classList.add('hidden');
+
+document.getElementById('save-edit-btn').addEventListener('click', async () => {
+    const id = document.getElementById('edit-task-id').value;
+    const title = document.getElementById('edit-task-title').value;
+    const due_date = document.getElementById('edit-task-date').value;
+    const category = document.getElementById('edit-task-category').value;
+    await fetch(`/api/tasks/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, due_date, category })
+    });
+    closeModal();
+    fetchTasks();
+});
+
+checkLogin();
