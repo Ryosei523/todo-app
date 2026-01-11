@@ -192,7 +192,7 @@ button:active { transform: scale(0.98); }
 
 /* ×ボタン：サイズを大きく、太く強調 */
 .delete-btn {
-    font-size: 18px !important; 
+    font-size: 25px !important; 
     font-weight: 900 !important;
 }
 
