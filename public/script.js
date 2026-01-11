@@ -7,7 +7,6 @@ const taskList = document.getElementById('task-list');
 function showApp(username) {
     authScreen.classList.add('hidden');
     appScreen.classList.remove('hidden');
-
     document.getElementById('display-name').textContent = username;
     fetchTasks();
 }
@@ -84,46 +83,59 @@ async function fetchTasks() {
 }
 
 function renderTasks(tasks) {
-    // ゲージ等の更新ロジック（省略）
+    // ゲージ等の更新
+    const total = tasks.length;
+    const completedCount = tasks.filter(t => t.status === 'completed').length;
+    const progressFill = document.getElementById('progress-fill');
+    if (progressFill) {
+        progressFill.style.width = (total > 0 ? (completedCount / total) * 100 : 0) + '%';
+    }
 
     const taskList = document.getElementById('task-list');
     taskList.innerHTML = '';
 
     tasks.forEach(task => {
         const dateStr = task.due_date ? new Date(task.due_date).toLocaleDateString() : '';
-
-        // ★★★ 【重要】この1行を追加してください ★★★
-        // 編集ボタンを押した時にタスクの情報を正しく渡すために必要です
         const taskData = JSON.stringify(task).replace(/"/g, '&quot;'); 
         
         const li = document.createElement('li');
         li.className = `task-item ${task.status === 'completed' ? 'completed' : ''}`;
         li.dataset.id = task.task_id;
         
-    li.innerHTML = `
-        <div class="task-top-row" style="display: flex; align-items: center; flex: 1; overflow: hidden;">
-            <input type="checkbox" style="width:20px;height:20px;margin:0;" 
-                ${task.status === 'completed' ? 'checked' : ''} 
-                onchange="toggleTask(${task.task_id}, this.checked)">
-            <span class="task-title">${task.title}</span>
-            <span class="task-category">${task.category || ''}</span>
-            <span class="task-date">${dateStr}</span>
-        </div>
-        <div class="task-bottom-row">
-            <button class="edit-btn" onclick="openEditModal(${taskData})">編集</button>
-        </div>
+        li.innerHTML = `
+            <div class="task-top-row">
+                <input type="checkbox" style="width:20px;height:20px;margin:0;" 
+                    ${task.status === 'completed' ? 'checked' : ''} 
+                    onchange="toggleTask(${task.task_id}, this.checked)">
+                <span class="task-title">${task.title}</span>
+                <span class="task-category">${task.category || ''}</span>
+                <span class="task-date">${dateStr}</span>
+            </div>
+            <div class="task-bottom-row">
+                <button class="edit-btn" onclick="openEditModal(${taskData})">編集</button>
+            </div>
         `;
         taskList.appendChild(li);
     });
 }
+
+// ★修正：タスク追加ロジック (ReferenceErrorを解消)
 document.getElementById('add-task-btn').addEventListener('click', async () => {
-    const id = document.getElementById('edit-task-id').value;
-    if (!title) return;
+    const title = document.getElementById('new-task-title').value;
+    const date = document.getElementById('new-task-date').value;
+    const category = document.getElementById('new-task-category').value;
+
+    if (!title) {
+        alert("タスク名を入力してください");
+        return;
+    }
+
     await fetch('/api/tasks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, due_date: date, category })
     });
+
     document.getElementById('new-task-title').value = '';
     fetchTasks();
 });
@@ -138,12 +150,7 @@ window.toggleTask = async (id, isChecked) => {
     fetchTasks();
 };
 
-window.deleteTask = async (id) => {
-    if (!confirm('削除しますか？')) return;
-    await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
-    fetchTasks();
-};
-
+// モーダル表示
 window.openEditModal = (task) => {
     document.getElementById('edit-task-id').value = task.task_id;
     document.getElementById('edit-task-title').value = task.title;
@@ -154,6 +161,7 @@ window.openEditModal = (task) => {
 
 window.closeModal = () => document.getElementById('edit-modal').classList.add('hidden');
 
+// モーダル内：保存処理
 document.getElementById('save-edit-btn').addEventListener('click', async () => {
     const id = document.getElementById('edit-task-id').value;
     const title = document.getElementById('edit-task-title').value;
@@ -167,5 +175,15 @@ document.getElementById('save-edit-btn').addEventListener('click', async () => {
     closeModal();
     fetchTasks();
 });
+
+// ★追加：モーダル内：削除処理
+document.getElementById('modal-delete-btn').onclick = async () => {
+    const id = document.getElementById('edit-task-id').value;
+    if (!confirm('このタスクを完全に削除しますか？')) return;
+    
+    await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+    closeModal();
+    fetchTasks();
+};
 
 checkLogin();
