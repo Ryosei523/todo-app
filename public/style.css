@@ -357,3 +357,22 @@ button:active { transform: scale(0.98); }
     text-decoration: line-through;
     opacity: 0.5;
 }
+
+/* プログレスバーのコンテナ */
+.progress-container { 
+    background: var(--border); 
+    height: 12px; /* 少し太くして見やすく */
+    border-radius: 6px; 
+    overflow: hidden; 
+    margin: 15px 0;
+}
+
+/* ゲージの塗りつぶしアニメーション */
+.progress-fill { 
+    background: linear-gradient(90deg, #28a745, #5ddc7b); /* グラデーションで綺麗に */
+    height: 100%; 
+    width: 0%; /* 初期値 */
+    /* 0.6秒かけて滑らかに動く設定 */
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); 
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.3);
+}

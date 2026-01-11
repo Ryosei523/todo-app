@@ -83,14 +83,23 @@ async function fetchTasks() {
 }
 
 function renderTasks(tasks) {
-    // ゲージ等の更新
+    // --- 1. カウントとゲージの更新 ---
     const total = tasks.length;
     const completedCount = tasks.filter(t => t.status === 'completed').length;
+    
+    // 数字を画面に反映させる
+    const totalEl = document.getElementById('total-count');
+    const completedEl = document.getElementById('completed-count');
+    if (totalEl) totalEl.textContent = total;
+    if (completedEl) completedEl.textContent = completedCount;
+
+    // ゲージの幅を更新
     const progressFill = document.getElementById('progress-fill');
     if (progressFill) {
         progressFill.style.width = (total > 0 ? (completedCount / total) * 100 : 0) + '%';
     }
 
+    // --- 2. リストの描画（以前のまま） ---
     const taskList = document.getElementById('task-list');
     taskList.innerHTML = '';
 
@@ -118,7 +127,6 @@ function renderTasks(tasks) {
         taskList.appendChild(li);
     });
 }
-
 // ★修正：タスク追加ロジック (ReferenceErrorを解消)
 document.getElementById('add-task-btn').addEventListener('click', async () => {
     const title = document.getElementById('new-task-title').value;
