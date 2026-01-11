@@ -48,6 +48,7 @@ header h1 {
 
 .header-right {
     display: flex;
+    align-items: center;    /* 名前とボタンの「中心」を合わせる */
     gap: 10px;
 }
 
@@ -162,4 +163,13 @@ button:active { transform: scale(0.98); }
 .task-item.completed .task-title {
     text-decoration: line-through;
     opacity: 0.5;
+}
+
+.user-label {
+    font-size: 14px;         /* ボタンに近いサイズ */
+    font-weight: 800;       /* はっきり見える太字 */
+    color: var(--text);     /* テーマに応じて白か黒に自動変更 */
+    margin-right: 12px;     /* ボタンとの適切な間隔 */
+    display: inline-block;
+    white-space: nowrap;    /* 改行を防止 */
 }
