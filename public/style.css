@@ -215,3 +215,12 @@ button:active { transform: scale(0.98); }
 .tab-btn.active { border: 3px solid #000; background: #f0f0f0; }
 #add-task-btn { background-color: #0056b3 !important; color: white !important; }
 #new-task-category, #new-task-date { height: 53px !important; }
+
+/* チェック（completedクラス）がついた時、タイトル・カテゴリ・日付すべてに線を引く */
+.task-item.completed .task-title,
+.task-item.completed .task-category,
+.task-item.completed .task-date {
+    text-decoration: line-through; /* 打ち消し線 */
+    opacity: 0.5;                 /* 少し薄くして「終わった感」を出す */
+    transition: 0.3s;             /* ふわっと切り替わるアニメーション */
+}
