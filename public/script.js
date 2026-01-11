@@ -84,24 +84,29 @@ async function fetchTasks() {
 }
 
 function renderTasks(tasks) {
-    const total = tasks.length;
-    const completedCount = tasks.filter(t => t.status === 'completed').length;
-    document.getElementById('total-count').textContent = total;
-    document.getElementById('completed-count').textContent = completedCount;
-    document.getElementById('progress-fill').style.width = (total > 0 ? (completedCount / total) * 100 : 0) + '%';
+    // ゲージ等の更新ロジック（省略）
 
+    const taskList = document.getElementById('task-list');
     taskList.innerHTML = '';
+
     tasks.forEach(task => {
+        const dateStr = task.due_date ? new Date(task.due_date).toLocaleDateString() : '';
+
+        // ★★★ 【重要】この1行を追加してください ★★★
+        // 編集ボタンを押した時にタスクの情報を正しく渡すために必要です
+        const taskData = JSON.stringify(task).replace(/"/g, '&quot;'); 
+        
         const li = document.createElement('li');
         li.className = `task-item ${task.status === 'completed' ? 'completed' : ''}`;
         li.dataset.id = task.task_id;
-        const dateStr = task.due_date ? new Date(task.due_date).toLocaleDateString() : '';
         
         li.innerHTML = `
             <div class="task-top-row">
-                <input type="checkbox" style="width:20px;height:20px;margin:0;" ${task.status === 'completed' ? 'checked' : ''} onchange="toggleTask(${task.task_id}, this.checked)">
-                <span class="task-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${task.title}</span>
-                <small style="opacity: 0.6; white-space: nowrap;">${task.category} ${dateStr}</small>
+                <input type="checkbox" style="width:20px;height:20px;margin:0;" 
+                    ${task.status === 'completed' ? 'checked' : ''} 
+                    onchange="toggleTask(${task.task_id}, this.checked)">
+                <span class="task-title">${task.title}</span>
+                <span class="task-meta">${task.category || '未設定'} ${dateStr}</span>
             </div>
             <div class="task-bottom-row">
                 <button class="edit-btn" onclick="openEditModal(${taskData})">編集</button>
@@ -111,7 +116,6 @@ function renderTasks(tasks) {
         taskList.appendChild(li);
     });
 }
-
 document.getElementById('add-task-btn').addEventListener('click', async () => {
     const title = document.getElementById('new-task-title').value;
     const date = document.getElementById('new-task-date').value;
