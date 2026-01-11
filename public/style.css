@@ -47,11 +47,13 @@ input[type="text"],
 input[type="password"], 
 input[type="date"], 
 select { 
-    display: block !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important; /* 左(flex-start)から中央(center)へ */
+    text-align: center !important;      /* 文字も中央へ */
     width: 100% !important; 
     height: 50px !important; 
-    padding: 0 12px !important; 
-    border: 1px solid #e0e0e0; 
+    padding: 0 !important;    border: 1px solid #e0e0e0; 
     border-radius: 10px; 
     box-sizing: border-box !important; 
     font-size: 16px; 
@@ -89,9 +91,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"]::before {
     content: "年 / 月 / 日";
     position: absolute;
-    left: 12px;
+    left: 50% !important;               /* 左から50%の位置へ */
     top: 50%;
-    transform: translateY(-50%);
+    transform: translate(-50%, -50%) !important; /* 自身の幅の半分戻して真ん中へ */
     color: #999;
     z-index: 1;
     pointer-events: none;
@@ -200,18 +202,20 @@ button:active { transform: scale(0.95); } /* 押し込み時の動き */
 /* --- 8. スマホ表示最適化 --- */
 @media (max-width: 480px) {
     .container { width: 96%; padding: 10px; margin: 10px auto; }
-/* --- スマホ版の日付表示を左寄せに固定する --- */
+
+    /* スマホでも確実に中央寄せにする */
     input[type="date"] {
-        text-align: left !important;            /* 1. 入力後の日付を左に寄せる */
-        justify-content: flex-start !important; /* 2. 要素全体を左端から並べる */
-        padding-left: 12px !important;          /* 3. 左端に余白を作る */
-        display: flex !important;               /* 4. 上下中央揃えを維持する */
+        text-align: center !important;      /* 文字を中央へ */
+        justify-content: center !important; /* 要素を中央へ */
+        padding-left: 0 !important;        /* 左の余白を消す */
     }
 
-    /* プレースホルダー（年/月/日）の位置も左に固定 */
+    /* ガイド文字（年/月/日）もスマホで中央固定 */
     input[type="date"]::before {
-        left: 12px !important;                 /* 左端から12pxの位置に固定 */
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
     }
+}
     /* 入力項目の高さをスマホ用に調整 */
     .task-input-card input, 
     .task-input-card select, 
