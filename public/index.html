@@ -53,19 +53,22 @@
         <main>
             <div class="card task-input-card">
                 <input type="text" id="new-task-title" placeholder="やるべきこと...">
-                <div class="input-options">
-                    <select id="new-task-category" title="カテゴリ">
+
+                <div class="category-row-wrapper">
+                    <button type="button" onclick="openCategoryModal()" class="add-cat-btn-subtle" title="カテゴリ管理">＋</button>
+                    <select id="new-task-category">
                         <option value="">カテゴリなし</option>
                     </select>
-                    <button type="button" onclick="openCategoryModal()" class="add-cat-btn" title="カテゴリ管理">＋</button>
-                    
-                    <input type="date" id="new-task-date">
-                    <select id="new-task-priority" title="優先度">
-                        <option value="low">優先度：低</option>
-                        <option value="medium" selected>優先度：中</option>
-                        <option value="high">優先度：高 🔥</option>
-                    </select>
                 </div>
+
+                <input type="date" id="new-task-date">
+
+                <select id="new-task-priority">
+                    <option value="low">優先度：低</option>
+                    <option value="medium" selected>優先度：中</option>
+                    <option value="high">優先度：高 🔥</option>
+                </select>
+                
                 <button id="add-task-btn">タスクを追加</button>
             </div>
             
@@ -78,7 +81,7 @@
             <h3>タスクを編集</h3>
             <input type="hidden" id="edit-task-id">
             <input type="text" id="edit-task-title" placeholder="タスク名">
-            <div class="input-options">
+            <div class="edit-options">
                 <select id="edit-task-category">
                     <option value="">カテゴリなし</option>
                 </select>
@@ -99,18 +102,13 @@
     <div id="category-modal" class="modal hidden">
         <div class="modal-content card">
             <h3>カテゴリ管理</h3>
-            
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                 <input type="text" id="new-category-name" placeholder="新しいカテゴリ名" style="flex: 1;">
                 <button id="save-category-btn">追加</button>
             </div>
-
             <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-
             <h4>登録済みのカテゴリ</h4>
-            <div id="category-manage-list" style="margin: 15px 0; max-height: 200px; overflow-y: auto;">
-                </div>
-
+            <div id="category-manage-list" style="margin: 15px 0; max-height: 200px; overflow-y: auto;"></div>
             <div class="modal-buttons">
                 <button onclick="closeCategoryModal()" class="secondary">閉じる</button>
             </div>
