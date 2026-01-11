@@ -164,4 +164,26 @@ app.delete('/api/tasks/:id', (req, res) => {
     });
 });
 
+// --- カテゴリ削除 API ---
+app.delete('/api/categories/:id', (req, res) => {
+    const categoryId = req.params.id;
+    const userId = req.session.userId;
+
+    if (!userId) return res.status(401).json({ message: '未ログイン' });
+
+    // 1. まず、そのカテゴリを使っているタスクの category_id を NULL に更新する
+    const updateTasksSql = 'UPDATE tasks SET category_id = NULL WHERE category_id = ? AND user_id = ?';
+    
+    connection.query(updateTasksSql, [categoryId, userId], (err) => {
+        if (err) return res.status(500).json(err);
+
+        // 2. その後、カテゴリ自体を削除する
+        const deleteCategorySql = 'DELETE FROM categories WHERE category_id = ? AND user_id = ?';
+        connection.query(deleteCategorySql, [categoryId, userId], (err) => {
+            if (err) return res.status(500).json(err);
+            res.json({ success: true });
+        });
+    });
+});
+
 app.listen(port, () => console.log(`Server is running on port: ${port}`));

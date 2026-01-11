@@ -17,14 +17,14 @@ const taskList = document.getElementById('task-list');
 const newTaskInput = document.getElementById('new-task-title');
 const newTaskDate = document.getElementById('new-task-date');
 const newTaskPriority = document.getElementById('new-task-priority');
-const newTaskCategory = document.getElementById('new-task-category'); // カテゴリ追加
+const newTaskCategory = document.getElementById('new-task-category');
 
 const editModal = document.getElementById('edit-modal');
 const editTaskId = document.getElementById('edit-task-id');
 const editTaskTitle = document.getElementById('edit-task-title');
 const editTaskDate = document.getElementById('edit-task-date');
 const editTaskPriority = document.getElementById('edit-task-priority');
-const editTaskCategory = document.getElementById('edit-task-category'); // カテゴリ追加
+const editTaskCategory = document.getElementById('edit-task-category');
 
 checkLogin();
 
@@ -43,7 +43,7 @@ function showApp(username) {
     authScreen.classList.add('hidden');
     appScreen.classList.remove('hidden');
     displayName.textContent = username;
-    fetchCategories(); // カテゴリ一覧を取得
+    fetchCategories(); 
     fetchTasks();
     checkReminders(); 
 }
@@ -53,7 +53,7 @@ function showAuth() {
     appScreen.classList.add('hidden');
 }
 
-// 登録・ログイン・ログアウトのリスナーは既存のまま
+// 登録・ログイン・ログアウトのリスナー
 document.getElementById('reg-btn').addEventListener('click', async () => {
     const username = document.getElementById('reg-user').value;
     const password = document.getElementById('reg-pass').value;
@@ -90,23 +90,55 @@ document.getElementById('logout-btn').addEventListener('click', async () => {
 async function fetchCategories() {
     try {
         const response = await fetch('/api/categories');
-        
-        // 401エラーなどの場合に処理を中断する
-        if (!response.ok) {
-            console.error('カテゴリの取得に失敗しました');
-            return; 
-        }
+        if (!response.ok) return console.error('カテゴリの取得に失敗しました');
 
         const categories = await response.json();
-        
-        // categoriesが配列であることを確認してからmapを使う
         if (!Array.isArray(categories)) return;
 
-        // ... 既存のmap処理 ...
+        // 1. タスク作成・編集用のプルダウンを更新
+        const updateSelect = (selectEl) => {
+            selectEl.innerHTML = '<option value="">カテゴリなし</option>';
+            categories.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat.category_id;
+                opt.textContent = cat.category_name;
+                selectEl.appendChild(opt);
+            });
+        };
+        updateSelect(newTaskCategory);
+        updateSelect(editTaskCategory);
+
+        // 2. カテゴリ管理用リストを更新（削除ボタン付き）
+        const categoryListContainer = document.getElementById('category-manage-list');
+        if (categoryListContainer) {
+            categoryListContainer.innerHTML = '';
+            categories.forEach(cat => {
+                const div = document.createElement('div');
+                div.className = 'category-manage-item';
+                div.innerHTML = `
+                    <span>${cat.category_name}</span>
+                    <button class="cat-delete-btn" onclick="deleteCategory(${cat.category_id})">削除</button>
+                `;
+                categoryListContainer.appendChild(div);
+            });
+        }
     } catch (error) {
         console.error('通信エラー:', error);
     }
 }
+
+// カテゴリ削除関数
+window.deleteCategory = async (id) => {
+    if (!confirm('このカテゴリを削除しますか？紐付いているタスクのカテゴリは解除されます。')) return;
+    const res = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+        fetchCategories();
+        fetchTasks();
+    } else {
+        alert('削除に失敗しました');
+    }
+};
+
 window.openCategoryModal = () => document.getElementById('category-modal').classList.remove('hidden');
 window.closeCategoryModal = () => document.getElementById('category-modal').classList.add('hidden');
 
@@ -216,14 +248,14 @@ document.getElementById('add-task-btn').addEventListener('click', async () => {
     const title = newTaskInput.value;
     const date = newTaskDate.value;
     const priority = newTaskPriority.value;
-    const category_id = newTaskCategory.value; // カテゴリ取得
+    const category_id = newTaskCategory.value;
 
     if (!title) return;
 
     await fetch('/api/tasks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, due_date: date, priority, category_id }) // category_id送信
+        body: JSON.stringify({ title, due_date: date, priority, category_id })
     });
     
     newTaskInput.value = '';
@@ -254,7 +286,7 @@ window.openEditModal = (task) => {
     editTaskTitle.value = task.title;
     editTaskDate.value = task.due_date ? task.due_date.split('T')[0] : '';
     editTaskPriority.value = task.priority;
-    editTaskCategory.value = task.category_id || ''; // 編集画面にカテゴリをセット
+    editTaskCategory.value = task.category_id || ''; 
     editModal.classList.remove('hidden');
 };
 
@@ -265,14 +297,14 @@ document.getElementById('save-edit-btn').addEventListener('click', async () => {
     const title = editTaskTitle.value;
     const due_date = editTaskDate.value;
     const priority = editTaskPriority.value;
-    const category_id = editTaskCategory.value; // 編集後のカテゴリ取得
+    const category_id = editTaskCategory.value;
 
     if (!title) return alert('タイトルは必須です');
 
     const res = await fetch(`/api/tasks/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, due_date, priority, category_id }) // category_id送信
+        body: JSON.stringify({ title, due_date, priority, category_id })
     });
 
     if (res.ok) {
