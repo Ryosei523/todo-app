@@ -177,3 +177,32 @@ header h1 { margin: 0; font-size: 24px; color: #1a1a1a; }
     border-radius: 4px;
     font-size: 11px;
 }
+
+/* カテゴリ管理リストのスタイル */
+#category-manage-list {
+    margin: 15px 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.category-manage-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.cat-delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.cat-delete-btn:hover {
+    background-color: #ff3333;
+}
