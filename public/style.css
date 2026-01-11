@@ -160,16 +160,28 @@ button:active { transform: scale(0.95); }
 
 .task-item { 
     background: white; 
-    padding: 20px; 
+    /* 上下のpaddingを15pxから10pxに減らして高さを抑える */
+    padding: 10px 18px !important; 
     border-radius: 12px; 
-    margin-bottom: 12px; 
+    margin-bottom: 10px; /* 枠同士の間隔も少し詰める */
     display: flex; 
-    flex-direction: column; /* 二行にするために縦方向に並べる */
-    gap: 15px;              /* 一行目と二行目の間隔 */
+    flex-direction: column; 
+    /* 1行目と2行目の間の隙間を15pxから6pxに凝縮 */
+    gap: 6px !important; 
     box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
     border-left: 6px solid #ddd;
     width: 100% !important; 
     box-sizing: border-box !important;
+}
+
+/* ボタン自体の縦幅も少しだけスリムにする */
+.edit-btn, .delete-btn { 
+    padding: 6px 12px !important; /* 縦のpaddingを削る */
+    font-size: 13px !important;    /* 文字をわずかに小さくして枠に収める */
+}
+
+.delete-btn {
+    font-size: 20px !important; /* ×印も少し調整 */
 }
 
 /* 一行目：チェック・名前・優先度を横並び */
