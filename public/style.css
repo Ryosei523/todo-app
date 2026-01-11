@@ -1,15 +1,21 @@
-/* --- 全体・基本設定 --- */
-body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f2f5; color: #333; margin: 0; }
+/* --- 1. 全体・基本設定とアニメーション --- */
+body { 
+    font-family: 'Helvetica Neue', Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif; 
+    background: #f0f2f5; 
+    color: #333; 
+    margin: 0; 
+    overflow-x: hidden;
+}
 
 .container { 
     max-width: 600px; 
     margin: 40px auto; 
     padding: 20px; 
-    animation: slideUp 0.6s ease-out; /* 起動時のふわっとした動き */
+    animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); /* 高級感のある動き */
 }
 
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
@@ -18,12 +24,12 @@ body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f2f5; co
 .card { 
     background: white; 
     padding: 25px; 
-    border-radius: 12px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
+    border-radius: 16px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
     margin-bottom: 20px; 
 }
 
-/* --- フォーム要素（色・形をここで一括定義）--- */
+/* --- 2. フォーム要素の基本設定 --- */
 input[type="text"], 
 input[type="password"], 
 input[type="date"], 
@@ -31,136 +37,143 @@ select {
     width: 100%; 
     padding: 12px; 
     margin: 8px 0; 
-    border: 1px solid #ddd; 
-    border-radius: 8px; 
+    border: 1px solid #e0e0e0; 
+    border-radius: 10px; 
     box-sizing: border-box; 
     font-size: 16px; 
     background-color: #fff;
-    transition: border-color 0.2s;
+    transition: all 0.2s ease;
 }
 
-/* 日付ボタンのカレンダーアイコン表示設定 */
+/* 入力欄にフォーカスした時のアニメーション */
+input:focus, select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    outline: none;
+}
+
+/* 日付ボタンの空白問題を解決する設定 */
 input[type="date"] {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: center; /* 値がない時は中央にアイコン */
-    background-size: 20px;
-    color: transparent; /* 入力前は文字を隠す */
-    cursor: pointer;
+    position: relative;
+    appearance: none;
+    -webkit-appearance: none;
 }
 
-/* 値が入った、またはクリックされたらアイコンを消す */
-input[type="date"]:focus,
-input[type="date"]:valid {
-    background-image: none;
-    color: #333;
-    text-align: left;
+/* 値がない時にカレンダーアイコンを表示 */
+input[type="date"]::before {
+    content: "📅";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: #999;
+    pointer-events: none;
 }
 
-/* ボタンの基本デザイン（PC・スマホ共通）*/
+/* 入力中または値がある時はアイコンを消す */
+input[type="date"]:focus::before,
+input[type="date"]:not([value=""]):valid::before {
+    display: none;
+}
+
+/* --- 3. ボタンのデザイン --- */
 button { 
     padding: 12px 20px; 
     border: none; 
-    border-radius: 8px; 
+    border-radius: 10px; 
     cursor: pointer; 
     font-weight: bold; 
-    transition: all 0.2s ease; 
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
 }
 
-button:active { transform: scale(0.96); } /* 押し込んだ時の動き */
+/* 押し込んだ時の「ぷにっ」とした動き */
+button:active { 
+    transform: scale(0.94); 
+}
 
-#login-btn, #add-task-btn { background: #007bff; color: white; width: 100%; }
+#login-btn, #add-task-btn { 
+    background: linear-gradient(135deg, #007bff, #0056b3); 
+    color: white; 
+    width: 100%; 
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+}
+
 .secondary { background: #6c757d; color: white; width: 100%; }
 .danger { background: #ff4d4d; color: white; padding: 8px 15px; }
 
-/* ＋ボタンのデザイン（PC・スマホで色・形を統一） */
+/* ＋ボタンの固定デザイン */
 .add-cat-btn { 
-    background: #6c757d; /* PC版と同じグレー */
-    color: white; 
-    font-size: 20px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    flex-shrink: 0;
-    width: 44px; /* PC版の高さに合わせる */
-    height: 44px;
+    background: #6c757d !important;
+    color: white !important; 
+    font-size: 22px !important; 
+    width: 44px !important; 
+    height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-header h1 { margin: 0; font-size: 24px; color: #1a1a1a; }
-
-.task-input-card { display: flex; flex-direction: column; gap: 10px; }
-
-.input-options { 
-    display: flex; 
-    gap: 10px; 
-    align-items: center; 
-}
-.input-options input, .input-options select { margin: 0; flex: 1; min-width: 0; }
-
-/* --- タスク一覧 --- */
+/* --- 4. タスク一覧の動き --- */
 #task-list { list-style: none; padding: 0; }
 .task-item { 
-    background: white; padding: 15px 20px; border-radius: 10px; margin-bottom: 12px;
+    background: white; padding: 15px 20px; border-radius: 12px; margin-bottom: 12px;
     display: flex; align-items: center; justify-content: space-between;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 6px solid #ddd;
-    animation: fadeIn 0.3s ease-out;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03); border-left: 6px solid #ddd;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.5s ease-out;
 }
-.task-item:hover { transform: translateX(4px); }
 
-.task-left { display: flex; align-items: center; gap: 18px; flex-grow: 1; }
-.task-left input[type="checkbox"] { width: 22px; height: 22px; flex-shrink: 0; }
+/* タスクにホバーした時の浮き上がり (PC版) */
+.task-item:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
 
-.task-info { display: flex; flex-direction: column; flex-grow: 1; }
-.task-title { font-size: 17px; font-weight: bold; color: #1a1a1a; }
-.task-meta { color: #777; font-size: 13px; margin-top: 5px; display: flex; align-items: center; gap: 12px; }
-.cat-tag { background: #e2e8f0; color: #4a5568; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+@keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
 
-/* --- スマホ表示 (480px以下) --- */
+/* --- 5. スマホ表示 (480px以下) の完璧な横一線 --- */
 @media (max-width: 480px) {
-    .container { margin: 10px auto; padding: 8px; width: 98%; }
-    header { flex-direction: column; gap: 10px; text-align: center; }
+    .container { margin: 10px auto; padding: 8px; width: 96%; }
+    header { flex-direction: column; gap: 12px; text-align: center; }
 
-    /* 横一線の配置（幅の比率だけを調整） */
+    /* 全てを1列に強制 */
     .input-options {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
-        gap: 4px !important;
+        gap: 6px !important;
         align-items: center !important;
-        height: 40px !important;
+        height: 44px !important; /* 高さを統一 */
     }
 
-    /* 中身のサイズだけスマホ用に微調整 */
     .input-options select, 
     .input-options input {
-        height: 40px !important;
-        padding: 0 4px !important;
-        font-size: 11px !important;
+        height: 44px !important;
+        padding: 0 6px !important;
+        font-size: 13px !important; /* 1行に収まる限界サイズ */
         margin: 0 !important;
-        -webkit-appearance: none; /* OS独自の装飾を消す */
-        appearance: none;
-    }
-
-    #new-task-category { flex: 3 !important; } 
-    
-    .add-cat-btn { 
-        flex: 0 0 40px !important; /* PC版と同じ正方形を維持 */
-        width: 40px !important;
-        height: 40px !important;
         border-radius: 8px !important;
     }
 
-    #new-task-date { 
-        flex: 2.5 !important; 
-        background-size: 16px; /* スマホ用にアイコンを少し小さく */
+    /* 幅の黄金比率 */
+    #new-task-category { flex: 3 !important; } 
+    .add-cat-btn { 
+        flex: 0 0 40px !important; 
+        width: 40px !important;
+        height: 40px !important;
     }
+    #new-task-date { flex: 2.2 !important; }
     #new-task-priority { flex: 2 !important; }
+
+    /* スマホ版の日付カレンダーアイコンサイズ */
+    input[type="date"]::before { font-size: 16px; }
 }
 
-/* カテゴリ管理リスト */
-#category-manage-list { margin: 15px 0; max-height: 200px; overflow-y: auto; }
-.category-manage-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #eee; }
-.cat-delete-btn { background-color: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+/* その他共通パーツ */
+.stats-info { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold; color: #555; }
+.progress-container { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: #28a745; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.cat-tag { background: #e9ecef; color: #495057; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; }
