@@ -100,13 +100,27 @@ input[type="date"]:focus::before {
 
 /* --- 5. カテゴリ・追加ボタン --- */
 .category-row-wrapper {
-    display: flex; align-items: center; background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding-left: 8px; height: 50px;
+    display: flex; 
+    align-items: center; 
+    background: #fff; 
+    border: 1px solid #e0e0e0; 
+    border-radius: 10px; 
+    padding-left: 0 !important; /* 8pxから0に変更して、selectの余白に合わせます */
+    height: 50px;
 }
 .add-cat-btn-subtle {
-    background: #f0f2f5 !important; color: #999 !important; width: 34px !important; height: 34px !important; min-width: 34px; border-radius: 6px !important; font-size: 18px !important; display: flex; align-items: center; justify-content: center; padding: 0 !important; margin-right: 8px !important; border: none !important;
+    /* ...既存の設定（background, width等）はそのまま... */
+    margin-right: 8px !important; /* 右端に少し余白を作る */
+    margin-left: 8px !important;  /* セレクトボックスとの間隔を作る */
+    border: none !important;
 }
-.category-row-wrapper select { border: none !important; flex: 1; background: transparent; height: 100% !important; padding-left: 4px !important; }
-
+.category-row-wrapper select { 
+    border: none !important; 
+    flex: 1; 
+    background: transparent; 
+    height: 100% !important; 
+    padding-left: 12px !important; /* 4pxから12pxに変更して、他のinputと揃えます */
+}
 /* --- 6. モーダル・中央配置 --- */
 .modal {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000;
