@@ -224,3 +224,75 @@ button:active { transform: scale(0.98); }
     opacity: 0.5;                 /* 少し薄くして「終わった感」を出す */
     transition: 0.3s;             /* ふわっと切り替わるアニメーション */
 }
+
+/* --- 7. モーダル：画面中央に固定 --- */
+.modal {
+    position: fixed; /* 画面に対して固定 */
+    top: 0;
+    left: 0;
+    width: 100vw; /* 画面幅いっぱい */
+    height: 100vh; /* 画面高さいっぱい */
+    z-index: 9999; /* 最前面に */
+    display: flex;
+    align-items: center; /* 縦の中央 */
+    justify-content: center; /* 横の中央 */
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* 少し濃いめにして集中させる */
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 420px;
+    background: var(--bg);
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    z-index: 10000;
+}
+
+/* ヘッダー：横並び */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+/* 削除ボタン：赤色のリンク形式 */
+.modal-delete-link {
+    background: none !important;
+    color: #ff4d4d !important; /* 赤色 */
+    width: auto !important;
+    height: auto !important;
+    font-size: 14px !important;
+    text-decoration: underline;
+    cursor: pointer;
+    border: none !important;
+    padding: 0 !important;
+    font-weight: bold;
+}
+
+/* フッターボタンの横並び */
+.modal-footer {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+.modal-footer button { flex: 1; }
+
+/* チェックが入った時、カテゴリや日付まで線を引く */
+.task-item.completed .task-title,
+.task-item.completed .task-category,
+.task-item.completed .task-date {
+    text-decoration: line-through; /* 打ち消し線 */
+    opacity: 0.5;
+    transition: 0.3s;
+}

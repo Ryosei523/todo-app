@@ -70,34 +70,34 @@
         </main>
     </div>
 
-    <div id="edit-modal" class="modal hidden">
-        <div class="modal-overlay" onclick="closeModal()"></div> <div class="modal-content card"></div>
-            <div class="modal-content card">
-                <h3>タスクを編集</h3>
-                <button id="modal-delete-btn" class="danger-link">このタスクを削除</button>
-            <div>
+<div id="edit-modal" class="modal hidden">
+    <div class="modal-overlay" onclick="closeModal()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>タスクを編集</h3>
+            <button id="modal-delete-btn" class="modal-delete-link">削除する</button>
+        </div>
+        
+        <input type="hidden" id="edit-task-id">
+        <input type="text" id="edit-task-title" placeholder="タスク名">
+        
+        <div class="edit-options">
+            <select id="edit-task-category">
+                <option value="仕事・学習">仕事・学習</option>
+                <option value="個人">個人</option>
+                <option value="買い物">買い物</option>
+                <option value="健康・運動">健康・運動</option>
+                <option value="その他">その他</option>
+            </select>
+            <input type="date" id="edit-task-date">
+        </div>
 
-            <input type="hidden" id="edit-task-id">
-            <input type="text" id="edit-task-title" placeholder="タスク名">
-
-
-            <div class="edit-options" style="display: flex; flex-direction: column; gap: 10px; margin: 15px 0;">
-                <select id="edit-task-category">
-                    <option value="仕事・学習">仕事・学習</option>
-                    <option value="個人">個人</option>
-                    <option value="買い物">買い物</option>
-                    <option value="健康・運動">健康・運動</option>
-                    <option value="その他">その他</option>
-                </select>
-                <input type="date" id="edit-task-date">
-            </div>
-            <div class="modal-buttons" style="display: flex; justify-content: flex-end; gap: 10px;">
-                <button id="save-edit-btn">保存する</button>
-                <button onclick="closeModal()" class="secondary">キャンセル</button>
-            </div>
+        <div class="modal-footer">
+            <button id="save-edit-btn">保存する</button>
+            <button onclick="closeModal()" class="secondary-btn">キャンセル</button>
         </div>
     </div>
-
+</div>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="script.js"></script>
 </body>
