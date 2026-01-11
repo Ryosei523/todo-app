@@ -1,25 +1,25 @@
-/* --- 1. 全体・基本設定と高級感のあるアニメーション --- */
+/* --- 1. 全体設定：すべてのズレをリセット --- */
+* {
+    box-sizing: border-box !important; /* 枠線の太さを幅に含める */
+    margin: 0;
+    padding: 0;
+}
+
 body { 
-    font-family: 'Helvetica Neue', Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif; 
+    font-family: 'Helvetica Neue', Arial, sans-serif; 
     background: #f0f2f5; 
     color: #333; 
-    margin: 0; 
-    overflow-x: hidden;
+    line-height: 1.6;
 }
 
 .container { 
     max-width: 600px; 
     margin: 40px auto; 
     padding: 20px; 
-    animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); /* ふわっと浮き上がる */
+    animation: slideUp 0.8s ease; 
 }
 
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.hidden { display: none !important; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
 .card { 
     background: white; 
@@ -29,213 +29,115 @@ body {
     margin-bottom: 20px; 
 }
 
-/* --- 2. 認証画面（ログイン・登録）の余白修正 --- */
-#auth-screen h2 { margin-bottom: 24px; }
-#auth-screen input { margin-bottom: 12px; }
-
-/* ログイン・登録ボタンをパスワード欄からしっかり離す */
-#login-btn, #reg-btn { 
-    margin-top: 24px !important; 
-    width: 100%;
+/* --- 2. 4段すべての幅と高さを「1ミリ」もズラさない設定 --- */
+.task-input-card {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* 段ごとの間隔を一定にする */
 }
 
-/* --- 3. フォーム要素の完全統一 (4段並び) --- */
-.task-input-card { display: flex; flex-direction: column; gap: 12px; }
-
-/* 全ての入力項目の幅と高さを厳格に固定 */
-input[type="text"], 
-input[type="password"], 
-input[type="date"], 
-select { 
+/* 4段すべてに共通する「型」を作る */
+.task-input-card input, 
+.task-input-card select, 
+.category-row-wrapper { 
+    width: 100% !important; 
+    height: 50px !important; 
+    border: 1px solid #e0e0e0; 
+    border-radius: 10px; 
+    background-color: #fff;
+    font-size: 16px;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important; /* 中身を中央へ */
-    text-align: center !important;      /* 文字も中央へ */
-    text-align-last: center !important; /* セレクトボックスの選択肢も中央へ */
-    width: 100% !important; 
-    height: 50px !important; 
-    padding: 0 !important;              /* 左右のズレを防ぐためpaddingを0に */
-    border: 1px solid #e0e0e0; 
-    border-radius: 10px; 
-    box-sizing: border-box !important; 
-    font-size: 16px; 
-    background-color: #fff;
-    margin: 0 !important;}
-
-input:focus, select:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-    outline: none;
 }
 
-/* --- 4. 日付入力の見た目：モダンなアイコンとガイド文字 --- */
+/* 文字の入力・選択状態もすべて中央に強制する */
+input[type="text"], select {
+    text-align: center !important;
+    text-align-last: center !important; /* select用の中央寄せ */
+}
+
+/* --- 3. カテゴリ枠内の中央寄せ --- */
+.category-row-wrapper {
+    padding-left: 10px;
+    overflow: hidden;
+}
+
+.add-cat-btn-subtle {
+    background: #f0f2f5 !important;
+    color: #999 !important;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    font-size: 18px;
+    border: none !important;
+    flex-shrink: 0; /* ボタンが潰れないように固定 */
+}
+
+.category-row-wrapper select {
+    border: none !important;
+    height: 100% !important;
+    text-align: center !important;
+}
+
+/* --- 4. 日付入力の「中央寄せ」決定版 --- */
 input[type="date"] {
     position: relative;
     appearance: none !important;
     -webkit-appearance: none !important;
-    text-align: left;
 }
 
-/* 標準のアイコンを透明化して隠す */
+/* ガイド文字をど真ん中に配置 */
+input[type="date"]::before {
+    content: "年 / 月 / 日";
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #999;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* 入力済みの数値を中央に寄せるためのSafari/Chrome対策 */
+input[type="date"]::-webkit-datetime-edit {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100%;
+}
+
+/* カレンダーアイコンを完全に消す */
 input[type="date"]::-webkit-calendar-picker-indicator {
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 0;
-    left: 0;
     opacity: 0 !important;
     cursor: pointer;
     z-index: 5;
 }
 
-/* 左側に「年 / 月 / 日」を表示 */
-input[type="date"]::before {
-    content: "年 / 月 / 日";
-    position: absolute;
-    left: 50% !important;
-    top: 50%;
-    transform: translate(-50%, -50%) !important; /* 自身の中心を枠の中心に重ねる */
-    color: #999;
-    z-index: 1;
-    pointer-events: none;
-    font-size: 14px;
-    width: 100%;             /* 幅いっぱいに広げて中央寄せを確実にする */
-    text-align: center;
-}
-/* 右側にモダンな線画カレンダーアイコンを表示 */
-input[type="date"]::after {
-    content: "";
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-size: contain;
-    z-index: 2;
-    pointer-events: none;
-}
-
-/* 値が入ったらプレースホルダーを隠す */
-input[type="date"]:valid::before,
-input[type="date"]:focus::before {
+input[type="date"]:focus::before,
+input[type="date"]:not([value=""]):valid::before {
     display: none !important;
 }
 
-/* --- 5. カテゴリ・追加ボタンの一体化 --- */
-.category-row-wrapper {
-    display: flex; 
-    align-items: center; 
-    justify-content: center; /* ＋ボタンとセレクト全体を中央付近へ */
-    background: #fff; 
-    border: 1px solid #e0e0e0; 
-    border-radius: 10px; 
-    padding-left: 8px; 
-    height: 50px;
-    box-sizing: border-box;
-}
-
-.category-row-wrapper select {
-    border: none !important;
-    flex: 1;
-    background: transparent;
-    height: 100% !important;
-    text-align: center !important; /* 文字を中央へ */
-}
-.add-cat-btn-subtle {
-    background: #f0f2f5 !important; 
-    color: #999 !important; 
-    width: 34px !important; 
-    height: 34px !important; 
-    min-width: 34px; 
-    border-radius: 6px !important; 
-    font-size: 18px !important; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    padding: 0 !important; 
-    margin-right: 8px !important; 
-    border: none !important;
-}
-
-/* --- 6. モーダル・中央配置 --- */
-.modal {
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    background: rgba(0,0,0,0.5); 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    z-index: 2000;
-}
-.modal-content {
-    width: 90%; 
-    max-width: 400px; 
-    animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 弾むような登場 */
-}
-@keyframes modalPop { 
-    from { transform: scale(0.8); opacity: 0; } 
-    to { transform: scale(1); opacity: 1; } 
-}
-
-/* --- 7. ボタンと一覧の動き --- */
-button { border-radius: 10px; font-weight: bold; transition: all 0.2s; cursor: pointer; border: none; padding: 12px; }
-button:active { transform: scale(0.95); } /* 押し込み時の動き */
+/* --- 5. ボタン・スマホ対応 --- */
+button { cursor: pointer; border-radius: 10px; font-weight: bold; border: none; transition: 0.2s; }
+button:active { transform: scale(0.96); }
 
 #add-task-btn { 
     background: linear-gradient(135deg, #007bff, #0056b3); 
     color: white; 
-    width: 100%; 
-    margin-top: 10px; 
     height: 52px !important;
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    margin-top: 10px;
 }
 
-.task-item { 
-    background: white; 
-    padding: 15px 20px; 
-    border-radius: 12px; 
-    margin-bottom: 12px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
-    border-left: 6px solid #ddd;
-    transition: all 0.2s ease;
-}
-.task-item:hover { transform: translateX(5px); }
-
-/* --- 8. スマホ表示最適化 --- */
 @media (max-width: 480px) {
-    .container { width: 96%; padding: 10px; margin: 10px auto; }
-
-    /* スマホでも確実に中央寄せにする */
-    input[type="date"] {
-        text-align: center !important;      /* 文字を中央へ */
-        justify-content: center !important; /* 要素を中央へ */
-        padding-left: 0 !important;        /* 左の余白を消す */
-    }
-
-    /* ガイド文字（年/月/日）もスマホで中央固定 */
-    input[type="date"]::before {
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
-    }
+    .container { width: 98%; padding: 10px; margin: 10px auto; }
 }
-    /* 入力項目の高さをスマホ用に調整 */
-    .task-input-card input, 
-    .task-input-card select, 
-    .category-row-wrapper { 
-        height: 52px !important; 
-        font-size: 16px !important;
-    }
 
 
-/* 進捗バー */
+
+/* 進捗バー・その他 */
 .progress-container { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; margin: 15px 0; }
 .progress-fill { height: 100%; background: #28a745; transition: width 0.6s ease; }
+.hidden { display: none !important; }
