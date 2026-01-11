@@ -152,11 +152,51 @@ button:active { transform: scale(0.95); }
     background: linear-gradient(135deg, #007bff, #0056b3); color: white; width: 100%; margin-top: 10px; height: 52px !important;
 }
 
-.task-item { 
-    background: white; padding: 15px 20px; border-radius: 12px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border-left: 6px solid #ddd;
-    width: 100% !important; box-sizing: border-box !important;
+#task-list {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
 }
 
+.task-item { 
+    background: white; 
+    padding: 15px 20px; 
+    border-radius: 12px; 
+    margin-bottom: 12px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
+    border-left: 6px solid #ddd;
+    /* 幅を100%に固定し、余計な左右マージンを消す */
+    width: 100% !important; 
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* 左側のチェックボックス、タスク名、優先度を一直線に並べる */
+.task-info {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* 要素同士の間隔 */
+    flex: 1;   /* 右側のボタンを端に追いやる */
+}
+
+/* チェックボックス自体のサイズ微調整 */
+.task-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* タスク名と優先度を横並びにする */
+.task-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 /* --- 8. スマホ表示最適化 (左寄せ強制) --- */
 @media (max-width: 480px) {
     .container { width: 96%; padding: 10px; margin: 10px auto; }
@@ -232,6 +272,32 @@ button:active { transform: scale(0.95); }
     min-width: 120px; /* ボタンに存在感を持たせる */
     background-color: #f0f2f5;
     color: #666;
+}
+
+/* ×ボタンのアイコンを太く大きく */
+.delete-btn { 
+    font-size: 24px !important; /* サイズアップ */
+    font-weight: 900 !important; /* 太さを最大に */
+    padding: 8px 12px !important;
+    line-height: 1 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* カテゴリ管理画面のボタン配置（右寄せ） */
+.category-manage-item { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 15px 0; 
+}
+
+.modal-buttons {
+    display: flex !important;
+    justify-content: flex-end !important; /* 全て右寄せ */
+    gap: 15px; /* ボタン同士を離す */
+    margin-top: 25px;
 }
 /* 進捗バー */
 .progress-container { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; margin: 15px 0; }
