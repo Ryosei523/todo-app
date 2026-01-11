@@ -234,7 +234,7 @@ button:active { transform: scale(0.98); }
 #new-task-category {
     appearance: none; 
     -webkit-appearance: none;
-    height: 50px !important; /* 55pxから50pxに縮小 */
+    height: 52.5px !important; /* 55pxから50pxに縮小 */
     box-sizing: border-box !important;
     
     /* アイコンも50pxに合わせて少しだけ小さく調整 (24px → 20px) */
@@ -248,7 +248,7 @@ button:active { transform: scale(0.98); }
 
 /* --- 3. 日付入力枠とカレンダーアイコン（高さを50pxに調整） --- */
 #new-task-date {
-    height: 50px !important; /* 55pxから50pxに縮小 */
+    height: 52.5px !important; /* 55pxから50pxに縮小 */
     box-sizing: border-box !important;
     position: relative;
     padding-right: 45px;
