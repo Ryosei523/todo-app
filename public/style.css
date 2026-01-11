@@ -296,3 +296,64 @@ button:active { transform: scale(0.98); }
     opacity: 0.5;
     transition: 0.3s;
 }
+
+/* --- 5. タスクリスト：幅の統一と一直線レイアウト --- */
+#task-list {
+    padding: 0;
+    margin: 0; /* 余計な余白を消して上の枠と幅を合わせる */
+}
+
+.task-item {
+    width: 100% !important; /* コンテナの幅いっぱいに広げる */
+    height: 55px !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px !important;
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-sizing: border-box !important; /* 枠線を含めて幅を計算 */
+}
+
+/* タスク名、カテゴリ、日付を一直線に */
+.task-top-row {
+    display: flex;
+    align-items: center; /* 縦方向の中央揃え */
+    flex: 1;
+    overflow: hidden;
+    gap: 15px; /* 要素同士の間隔を一定にする */
+}
+
+.task-title {
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1; /* タイトルエリアを優先的に広げる */
+}
+
+.task-category, .task-date {
+    font-weight: bold;
+    font-size: 13px;
+    opacity: 0.8;
+    white-space: nowrap;
+    flex-shrink: 0; /* 画面が狭くても潰れないようにする */
+}
+
+/* 編集ボタンの位置：さらに少し下げる */
+.task-bottom-row {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    transform: translateY(4px); /* 2pxから4pxへ下げ幅を調整 */
+}
+
+/* チェック時の打ち消し線（一行すべて） */
+.task-item.completed .task-title,
+.task-item.completed .task-category,
+.task-item.completed .task-date {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
