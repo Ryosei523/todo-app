@@ -7,6 +7,8 @@ const taskList = document.getElementById('task-list');
 function showApp(username) {
     authScreen.classList.add('hidden');
     appScreen.classList.remove('hidden');
+
+    document.getElementById('display-name').textContent = username;
     fetchTasks();
 }
 
