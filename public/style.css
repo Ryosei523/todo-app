@@ -198,7 +198,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer !important;
     padding: 0 !important;       /* タップエリアを大きくして操作性アップ */
     margin-left: auto;              /* 強制的に右端へ寄せる */
-    margin-right: -15px !important;
+    margin-right: -30px !important;
     border: none !important;
     line-height: 1;
     transform: translateY(2px);
