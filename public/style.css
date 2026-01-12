@@ -86,6 +86,10 @@ input, select, button {
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
+#add-task-btn:active {
+    transform: scale(0.98); /* 押した時に少し凹む演出 */
+}
+
 /* --- 2. カテゴリの選択枠（矢印アイコンを大きく調整） --- */
 #new-task-category {
     appearance: none; 
@@ -151,9 +155,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .task-item {
     height: 55px !important; margin-bottom: 12px; 
     border-radius: 12px; border: 1px solid var(--border);
-    background: var(--card); display: flex; align-items: center; 
-    justify-content: space-between; padding: 0 15px !important;
-    box-sizing: border-box !important;
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* さりげない影 */
 }
 .task-top-row { 
     display: flex; 
@@ -164,6 +168,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .task-title { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; max-width: 150px; line-height: 1.2;}
 .task-category, .task-date { font-weight: bold; font-size: 12px; opacity: 0.7; white-space: nowrap; transform: none;line-height: 1; }
+.task-category {
+    background: #e0e7ff; /* 非常に薄い青 */
+    color: #4338ca;      /* 濃い青 */
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
 .edit-btn { 
     width: auto !important; height: 32px !important; padding: 0 12px !important;
     font-size: 12px !important; border-radius: 8px !important; 
@@ -174,6 +186,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .task-item.completed .task-category, 
 .task-item.completed .task-date { 
     text-decoration: line-through; opacity: 0.5; 
+}
+
+/* 完了済みタスクの色味 */
+.task-item.completed {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: transparent;
 }
 
 /* --- 8. モーダル（画面中央固定） --- */
