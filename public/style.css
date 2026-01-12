@@ -178,13 +178,66 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .task-item.completed { background: rgba(255, 255, 255, 0.6); border-color: transparent; }
 .task-item.completed .task-title, .task-item.completed .task-date { text-decoration: line-through; opacity: 0.5; }
 
-/* --- 8. モーダル --- */
-.modal-header { display: flex; align-items: center; margin-bottom: 50px; position: relative; width: 100%; }
-.modal-header h3 { margin: 0; white-space: nowrap; font-size: 20px; }
-.modal-delete-link {
-    position: absolute; right: -20px; top: 50%; transform: translateY(-50%); 
-    background: none !important; color: #ff4d4d !important; font-size: 16px !important;
-    text-decoration: none !important; font-weight: bold; cursor: pointer !important;
+/* --- 8. モーダル：画面中央に復活させる --- */
+
+.modal {
+    position: fixed;      /* ★画面の決まった位置に固定する */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;        /* ★一番手前に表示させる */
+    display: flex;        /* 中身を中央に寄せるための設定 */
+    align-items: center;  /* 上下中央 */
+    justify-content: center; /* 左右中央 */
 }
 
+.modal-overlay {
+    position: absolute;   /* モーダル枠内いっぱいに広げる */
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* 背景を暗くする */
+    backdrop-filter: blur(4px);    /* 背景をぼかすとおしゃれになります */
+}
+
+.modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    background: var(--card); /* テーマに合わせた背景色 */
+    padding: 30px;
+    border-radius: 24px;
+    z-index: 10000;         /* オーバーレイより手前に */
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); /* 浮いている感じを出す影 */
+}
+
+/* ヘッダーとボタンの配置（右隅固定） */
+.modal-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+    width: 100%;
+}
+
+.modal-header h3 { margin: 0; font-size: 20px; font-weight: bold; }
+
+.modal-delete-link {
+    position: absolute;
+    right: -10px; /* 右端に寄せる */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ff4d4d !important;
+    font-size: 15px !important;
+    text-decoration: none !important;
+    font-weight: bold;
+    cursor: pointer !important;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
 input[type="checkbox"] { cursor: pointer !important; }
