@@ -1,10 +1,11 @@
 /* --- 1. テーマ変数 --- */
 
 :root {
-    --bg: #ffffff;
-    --text: #000000;
-    --card: #f8f9fa;
-    --border: #dddddd;
+    --bg: #f5f7fa;      /* 真っ白ではなく、少し青みのある白 */
+    --text: #1a1c20;
+    --card: #ffffff;
+    --border: #e1e4e8;
+    --accent: #007aff;  /* 鮮やかなブルー（iOS風） */
 }
 [data-theme="dark"] {
     --bg: #000000;
