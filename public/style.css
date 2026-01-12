@@ -139,7 +139,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: auto !important; height: 32px !important; padding: 0 12px !important;
     font-size: 12px !important; border-radius: 8px !important; 
     background: #fff !important; color: #000 !important;
-    transform: translateY(3.5px);
+    transform: translateY(4px);
 }
 .task-item.completed .task-title, 
 .task-item.completed .task-category, 
@@ -164,3 +164,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .modal-delete-link { color: #ff4d4d !important; font-size: 14px; text-decoration: underline; background: none; border: none; font-weight: bold; cursor: pointer; }
 .modal-footer { display: flex; gap: 10px; margin-top: 20px; }
+
+#new-task-category {
+    /* 既存の設定の最後に追加 */
+    cursor: pointer !important; /* カテゴリ選択をクリックした時に手にする */
+}
+
+/* 新しく追加してください */
+input[type="checkbox"] {
+    cursor: pointer !important; /* チェックマークにマウスを置いた時に手にする */
+}
