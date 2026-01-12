@@ -79,16 +79,40 @@ header {
     height: 100%; width: 0%; 
     transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+/* --- 5. フィルタータブ：文字をど真ん中に配置 --- */
 
-/* --- 5. フィルタータブ --- */
-.filter-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-.tab-btn { 
-    flex: 1; height: 50px !important; border-radius: 12px; 
-    background: #fff; color: #000; border: 1px solid var(--border); 
-    font-weight: bold; cursor: pointer;
+.filter-tabs { 
+    display: flex; 
+    gap: 8px; 
+    margin-bottom: 20px; 
 }
-.tab-btn.active { border: 3px solid #000; background: #f0f0f0; }
 
+.tab-btn { 
+    flex: 1; 
+    height: 50px !important; 
+    border-radius: 12px; 
+    background: #fff; 
+    color: #000; 
+    border: 1px solid var(--border); 
+    font-weight: bold; 
+    cursor: pointer;
+
+    /* ★ここを追加：中身を上下左右中央に集める */
+    display: flex;            
+    align-items: center;      /* 上下中央 */
+    justify-content: center;  /* 左右中央 */
+    line-height: 1;           /* 行間の余白をリセット */
+    padding: 0 !important;    /* 意図しない余白を消去 */
+}
+
+/* アクティブ時の枠線を少し太くして強調 */
+.tab-btn.active { 
+    border: 3px solid #000; 
+    background: #f0f0f0; 
+}
+
+[data-theme="dark"] .tab-btn { background: #222; color: #fff; }
+[data-theme="dark"] .tab-btn.active { border-color: var(--accent); }
 /* --- 6. フォーム（入力エリア） --- */
 input, select, button { 
     width: 100%; 
