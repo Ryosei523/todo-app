@@ -182,15 +182,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 .modal-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin-bottom: 50px;
-    
-    /* ★ここが重要！親要素を右側の余白(30px)分だけ広げる */
-    margin-right: -30px !important; 
-    
-    /* 削除ボタンが右の壁にピッタリくっつきすぎるなら、ここを 5px〜10px に調整 */
-    padding-right: 0 !important; 
+    position: relative; /* ★削除ボタンを配置する基準点にする */
+    width: 100%;
 }
 .modal-header h3 {
     margin: 0;
@@ -199,6 +194,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     line-height: 1;
 }
 .modal-delete-link {
+    position: absolute;    /* ★親要素の並び順ルールから離脱する */
+    right: -20px;          /* ★右端からの距離（マイナスで壁に突き刺す） */
+    
+    /* 垂直方向をタイトルと完璧に揃える */
+    top: 50%;
+    transform: translateY(-50%); 
+    
     background: none !important;
     color: #ff4d4d !important;
     font-size: 16px !important;
@@ -206,15 +208,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-weight: bold;
     cursor: pointer !important;
     border: none !important;
-    padding: 0 !important;
-    
-    /* 右端への配置 */
-    margin-left: auto;
-    margin-right: 0 !important; /* 親が右に広がったので、ここは0で右端に行きます */
-    
-    /* 高さの微調整 */
-    line-height: 1;
-    transform: translateY(2px);
+    padding: 10px !important; /* タップしやすくする */
+    margin: 0 !important;     /* マージンは不要になるのでリセット */
 }
 
 .modal-delete-link:hover {
