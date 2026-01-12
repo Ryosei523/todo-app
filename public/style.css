@@ -180,14 +180,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background: var(--bg); padding: 30px; border-radius: 24px;
     z-index: 10000; border: 1px solid var(--border);
 }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; width: 100%; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-right: 5px; }
 
 .modal-header h3 {
     margin: 0;
     white-space: nowrap;           /* ★文字を絶対に改行させず一列にする */
     font-size: 20px;               /* タイトルのサイズ調整 */
-    flex-shrink: 0;                /* ボタンに押されて潰れないように固定 */
-    line-height: 1.2;
+    line-height: 1;
 }
 
 .modal-delete-link {
@@ -200,7 +199,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     padding: 0 !important;       /* タップエリアを大きくして操作性アップ */
     margin-left: auto;              /* 強制的に右端へ寄せる */
     border: none !important;
-    line-height: 1.2;
+    line-height: 1;
+    transform: translateY(2px);
 }
 
 .modal-delete-link:hover {
