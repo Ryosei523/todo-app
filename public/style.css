@@ -25,9 +25,10 @@ body {
 }
 
 .container { 
-    max-width: 500px; 
+    max-width: 450px; 
     margin: 40px auto; 
     padding: 20px; 
+    width: 95%;
 }
 
 .hidden { display: none !important; }
