@@ -120,8 +120,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     justify-content: space-between; padding: 0 15px !important;
     box-sizing: border-box !important;
 }
-.task-top-row { display: flex; align-items: center; flex: 1; gap: 15px; overflow: hidden; }
-.task-title { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+.task-top-row { 
+    display: flex; 
+    align-items: center; 
+    gap: 8px;        /* 15pxから8pxにすることで「小空白」になります */
+    flex: none;      /* flex: 1を止めることで、右側へ勝手に広がらなくなります */
+    overflow: hidden; 
+}
+.task-title { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; max-width: 150px;}
 .task-category, .task-date { font-weight: bold; font-size: 12px; opacity: 0.7; white-space: nowrap; }
 .edit-btn { 
     width: auto !important; height: 32px !important; padding: 0 12px !important;
