@@ -180,26 +180,39 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background: var(--bg); padding: 30px; border-radius: 24px;
     z-index: 10000; border: 1px solid var(--border);
 }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; padding-right:0 !important;}
-
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+    
+    /* ★ここが重要！親要素を右側の余白(30px)分だけ広げる */
+    margin-right: -30px !important; 
+    
+    /* 削除ボタンが右の壁にピッタリくっつきすぎるなら、ここを 5px〜10px に調整 */
+    padding-right: 0 !important; 
+}
 .modal-header h3 {
     margin: 0;
     white-space: nowrap;           /* ★文字を絶対に改行させず一列にする */
     font-size: 20px;               /* タイトルのサイズ調整 */
     line-height: 1;
 }
-
 .modal-delete-link {
     background: none !important;
-    color: #ff4d4d !important;      /* 目立つ赤色 */
-    font-size: 16px !important;     /* 文字を大きく調整 */
-    text-decoration: none !important; /* ★下線を消す */
+    color: #ff4d4d !important;
+    font-size: 16px !important;
+    text-decoration: none !important;
     font-weight: bold;
     cursor: pointer !important;
-    padding: 0 !important;       /* タップエリアを大きくして操作性アップ */
-    margin-left: auto;              /* 強制的に右端へ寄せる */
-    margin-right: -30px !important;
     border: none !important;
+    padding: 0 !important;
+    
+    /* 右端への配置 */
+    margin-left: auto;
+    margin-right: 0 !important; /* 親が右に広がったので、ここは0で右端に行きます */
+    
+    /* 高さの微調整 */
     line-height: 1;
     transform: translateY(2px);
 }
