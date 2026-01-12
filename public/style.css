@@ -200,6 +200,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     margin-left: auto;              /* 強制的に右端へ寄せる */
     border: none !important;
     line-height: 1;
+    margin: 0 0 0 auto;
     transform: translateY(2px);
 }
 
