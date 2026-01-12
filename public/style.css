@@ -7,13 +7,14 @@
     --border: #e1e4e8;
     --accent: #007aff;  /* 鮮やかなブルー（iOS風） */
 }
-[data-theme="dark"] {
-    --bg: #000000;
-    --text: #ffffff;
-    --card: #1a1a1a;
-    --border: #333333;
-}
 
+[data-theme="dark"] {
+    --bg: #0f172a;       /* 深夜のような深い紺色 */
+    --text: #f1f5f9;
+    --card: #1e293b;
+    --border: #334155;
+    --accent: #38bdf8;   /* ダークモードでは少し明るい水色 */
+}
 /* --- 2. 全体設定（ここが幅の決め手です） --- */
 body { 
     background-color: var(--bg); 
@@ -76,7 +77,15 @@ input, select, button {
     border: 1px solid var(--border); background: var(--bg); color: var(--text); 
     box-sizing: border-box !important; font-size: 16px;
 }
-#add-task-btn { background: #0056b3 !important; color: white !important; }
+#add-task-btn { 
+    background: linear-gradient(135deg, var(--accent), var(--accent-hover)) !important; 
+    color: white !important; 
+    border: none !important;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.2); /* ほんのり浮かせる */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
 /* --- 2. カテゴリの選択枠（矢印アイコンを大きく調整） --- */
 #new-task-category {
     appearance: none; 
