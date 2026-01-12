@@ -70,12 +70,17 @@ header {
 
 /* --- 6. フォーム（入力エリア） --- */
 input, select, button { 
-    width: 100%; height: 55px; 
-    margin-bottom: 12px; border-radius: 12px; 
-    border: 1px solid var(--border); background: var(--card); color: var(--text); 
-    box-sizing: border-box !important; font-size: 16px;
+    width: 100%; 
+    height: 55px; 
+    margin-bottom: 12px; 
+    border-radius: 12px; 
+    border: 1px solid var(--border); 
+    background: var(--card); 
+    color: var(--text); 
+    box-sizing: border-box !important; /* 枠の太さを幅に含める */
+    font-size: 16px;
+    padding-left: 15px;               /* ★全てのテキスト開始位置を15pxで統一 */
 }
-
 /* ★「タスクを追加」ボタンの文字を白く、太く修正 */
 #add-task-btn { 
     background: linear-gradient(135deg, var(--accent), var(--accent-hover)) !important; 
@@ -89,27 +94,35 @@ input, select, button {
 #add-task-btn:active { transform: scale(0.98); }
 
 #new-task-category {
-    appearance: none; -webkit-appearance: none;
+    appearance: none; 
+    -webkit-appearance: none;
     height: 53px !important;
+    padding-left: 15px;               /* 左を15pxに固定 */
+    padding-right: 60px;              /* 右のアイコン用余白 */
+    
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23999'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 15px center; 
     background-size: 28px 28px;
-    padding-right: 60px;
     cursor: pointer !important;
 }
 
 #new-task-date, #edit-task-date {
     height: 53px !important;
     position: relative;
-    padding: 0 60px 0 15px;
-    appearance: none; -webkit-appearance: none;
+    /* 上下の余白を0、右を60px、左を15pxで統一 */
+    padding: 0 60px 0 15px !important; 
+    
+    appearance: none; 
+    -webkit-appearance: none;
+    display: block;
+    line-height: 53px;
+    
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23999' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 15px center;
     background-size: 24px 24px;
 }
-
 input[type="date"]::-webkit-calendar-picker-indicator {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     opacity: 0; cursor: pointer; z-index: 2;
