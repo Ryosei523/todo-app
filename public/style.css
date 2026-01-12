@@ -4,31 +4,28 @@
     --text: #000000;
     --card: #f8f9fa;
     --border: #dddddd;
-    --accent: #000000;
 }
-
 [data-theme="dark"] {
     --bg: #000000;
     --text: #ffffff;
     --card: #1a1a1a;
     --border: #333333;
-    --accent: #ffffff;
 }
 
-/* --- 2. 全体設定 --- */
+/* --- 2. 全体設定（ここが幅の決め手です） --- */
 body { 
     background-color: var(--bg); 
     color: var(--text); 
-    transition: background-color 0.3s, color 0.3s; 
+    transition: background-color 0.3s; 
     font-family: 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
 }
 
 .container { 
-    max-width: 450px; 
-    margin: 40px auto; 
-    padding: 20px; 
-    width: 50%;
+    max-width: 480px;      /* PCで見るときの最大幅。ここを小さくするとスリムになります */
+    width: 90%;            /* スマホで見るときの幅 */
+    margin: 40px auto;     /* 画面の中央に配置 */
+    padding: 0;            /* 余計な余白をカット */
 }
 
 .hidden { display: none !important; }
@@ -40,340 +37,78 @@ header {
     align-items: center;
     margin-bottom: 30px;
 }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.header-right button { width: auto !important; height: 36px !important; font-size: 13px !important; }
 
-header h1 {
-    margin: 0;
-    font-size: 28px;
-    letter-spacing: -1px;
-}
-
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.header-right button {
-    width: auto !important;
-    height: 36px !important;
-    padding: 0 15px !important;
-    font-size: 13px !important;
-    margin: 0 !important;
-}
-
-/* --- 4. フォーム要素 --- */
-input, select, button { 
-    width: 100%; 
-    height: 48px; 
-    margin-bottom: 12px; 
-    border-radius: 10px; 
-    border: 1px solid var(--border); 
-    background: var(--bg); 
-    color: var(--text); 
-    font-size: 16px;
-    box-sizing: border-box;
-}
-
-#new-task-category, #new-task-date {
-    height: 65px !important; 
-    font-size: 18px !important;
-    font-weight: bold;
-    padding: 0 20px;
-    border: 2px solid var(--border);
-}
-
-button { 
-    background: var(--text); 
-    color: var(--bg); 
-    border: none; 
-    font-weight: bold; 
-    cursor: pointer; 
-    transition: transform 0.1s;
-}
-
-button:active { transform: scale(0.98); }
-
-/* --- 5. タスクリスト（編集ボタンのみ） --- */
-.task-item {
-    width: 100% !important;
-    height: 55px !important;
-    margin-bottom: 12px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    color: var(--text);
-    box-sizing: border-box !important;
-    padding: 0 15px !important;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: grab;
-}
-
-.task-top-row {
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
-    overflow: hidden;
-}
-
-.task-title {
-    font-weight: bold;
-    margin: 0 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex-grow: 1;
-}
-
-.task-category {
-    font-weight: bold;
-    font-size: 13px;
-    opacity: 0.8;
-    white-space: nowrap;
-    margin-right: 15px;
-}
-
-.task-date {
-    font-weight: bold;
-    font-size: 13px;
-    opacity: 0.8;
-    white-space: nowrap;
-}
-
-.edit-btn {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    border: 1px solid var(--border) !important;
-    height: 36px !important;
-    width: auto !important;
-    padding: 0 12px !important;
-    border-radius: 8px !important;
-    font-size: 12px !important;
-    font-weight: bold;
-}
-
-[data-theme="dark"] .edit-btn {
-    background-color: #222222 !important;
-    color: #ffffff !important;
-    border-color: #444444 !important;
-}
-
-/* --- 6. モーダル：中央配置とオーバーレイ --- */
-.modal {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-overlay {
-    position: absolute;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-}
-
-.modal-content {
-    position: relative;
-    width: 90%;
-    max-width: 400px;
-    background: var(--bg);
-    padding: 25px;
-    border-radius: 20px;
-    z-index: 1001;
-    border: 1px solid var(--border);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.modal-header h3 { margin: 0; }
-
-/* モーダル内削除ボタン（赤いテキスト） */
-.modal-delete-link {
-    background: none !important;
-    color: #ff4d4d !important;
-    width: auto !important;
-    height: auto !important;
-    font-size: 14px !important;
-    text-decoration: underline;
-    padding: 0 !important;
-    margin: 0 !important;
-    font-weight: bold;
-}
-
-/* --- 7. その他 --- */
-.filter-tabs { display: flex; gap: 8px; margin-bottom: 10px; }
-.tab-btn { flex: 1; height: 55px !important; border-radius: 12px; font-weight: bold; background: #fff; color: #000; border: 1px solid var(--border); }
-.tab-btn.active { border: 3px solid #000; background: #f0f0f0; }
-#add-task-btn { background-color: #0056b3 !important; color: white !important; }
-#new-task-category, #new-task-date { height: 53px !important; }
-
-/* チェック（completedクラス）がついた時、タイトル・カテゴリ・日付すべてに線を引く */
-.task-item.completed .task-title,
-.task-item.completed .task-category,
-.task-item.completed .task-date {
-    text-decoration: line-through; /* 打ち消し線 */
-    opacity: 0.5;                 /* 少し薄くして「終わった感」を出す */
-    transition: 0.3s;             /* ふわっと切り替わるアニメーション */
-}
-
-/* --- 7. モーダル：画面中央に固定 --- */
-.modal {
-    position: fixed; /* 画面に対して固定 */
-    top: 0;
-    left: 0;
-    width: 100vw; /* 画面幅いっぱい */
-    height: 100vh; /* 画面高さいっぱい */
-    z-index: 9999; /* 最前面に */
-    display: flex;
-    align-items: center; /* 縦の中央 */
-    justify-content: center; /* 横の中央 */
-}
-
-.modal-overlay {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.7); /* 少し濃いめにして集中させる */
-    backdrop-filter: blur(5px);
-}
-
-.modal-content {
-    position: relative;
-    width: 90%;
-    max-width: 420px;
-    background: var(--bg);
-    padding: 30px;
-    border-radius: 24px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    border: 1px solid var(--border);
-    z-index: 10000;
-}
-
-/* ヘッダー：横並び */
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-/* 削除ボタン：赤色のリンク形式 */
-.modal-delete-link {
-    background: none !important;
-    color: #ff4d4d !important; /* 赤色 */
-    width: auto !important;
-    height: auto !important;
-    font-size: 14px !important;
-    text-decoration: underline;
-    cursor: pointer;
-    border: none !important;
-    padding: 0 !important;
-    font-weight: bold;
-}
-
-/* フッターボタンの横並び */
-.modal-footer {
-    display: flex;
-    gap: 12px;
-    margin-top: 20px;
-}
-.modal-footer button { flex: 1; }
-
-/* チェックが入った時、カテゴリや日付まで線を引く */
-.task-item.completed .task-title,
-.task-item.completed .task-category,
-.task-item.completed .task-date {
-    text-decoration: line-through; /* 打ち消し線 */
-    opacity: 0.5;
-    transition: 0.3s;
-}
-
-/* --- 5. タスクリスト：幅の統一と一直線レイアウト --- */
-#task-list {
-    padding: 0;
-    margin: 0; /* 余計な余白を消して上の枠と幅を合わせる */
-}
-
-.task-item {
-    width: 100% !important; /* コンテナの幅いっぱいに広げる */
-    height: 55px !important;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 15px !important;
-    background-color: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 12px;
-    box-sizing: border-box !important; /* 枠線を含めて幅を計算 */
-}
-
-/* タスク名、カテゴリ、日付を一直線に */
-.task-top-row {
-    display: flex;
-    align-items: center; /* 縦方向の中央揃え */
-    flex: 1;
-    overflow: hidden;
-    gap: 15px; /* 要素同士の間隔を一定にする */
-}
-
-.task-title {
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1; /* タイトルエリアを優先的に広げる */
-}
-
-.task-category, .task-date {
-    font-weight: bold;
-    font-size: 13px;
-    opacity: 0.8;
-    white-space: nowrap;
-    flex-shrink: 0; /* 画面が狭くても潰れないようにする */
-}
-
-/* 編集ボタンの位置：さらに少し下げる */
-.task-bottom-row {
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
-    transform: translateY(4px); /* 2pxから4pxへ下げ幅を調整 */
-}
-
-/* チェック時の打ち消し線（一行すべて） */
-.task-item.completed .task-title,
-.task-item.completed .task-category,
-.task-item.completed .task-date {
-    text-decoration: line-through;
-    opacity: 0.5;
-}
-
-/* プログレスバーのコンテナ */
+/* --- 4. 統計とプログレスバー --- */
 .progress-container { 
     background: var(--border); 
-    height: 12px; /* 少し太くして見やすく */
-    border-radius: 6px; 
-    overflow: hidden; 
-    margin: 15px 0;
+    height: 12px; border-radius: 6px; 
+    overflow: hidden; margin: 15px 0;
+}
+.progress-fill { 
+    background: linear-gradient(90deg, #28a745, #5ddc7b); 
+    height: 100%; width: 0%; 
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ゲージの塗りつぶしアニメーション */
-.progress-fill { 
-    background: linear-gradient(90deg, #28a745, #5ddc7b); /* グラデーションで綺麗に */
-    height: 100%; 
-    width: 0%; /* 初期値 */
-    /* 0.6秒かけて滑らかに動く設定 */
-    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); 
-    box-shadow: 0 0 10px rgba(40, 167, 69, 0.3);
+/* --- 5. フィルタータブ --- */
+.filter-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+.tab-btn { 
+    flex: 1; height: 50px !important; border-radius: 12px; 
+    background: #fff; color: #000; border: 1px solid var(--border); 
+    font-weight: bold; cursor: pointer;
 }
+.tab-btn.active { border: 3px solid #000; background: #f0f0f0; }
+[data-theme="dark"] .tab-btn { background: #222; color: #fff; }
+
+/* --- 6. フォーム（入力エリア） --- */
+input, select, button { 
+    width: 100%; height: 55px; 
+    margin-bottom: 12px; border-radius: 12px; 
+    border: 1px solid var(--border); background: var(--bg); color: var(--text); 
+    box-sizing: border-box !important; font-size: 16px;
+}
+#add-task-btn { background: #0056b3 !important; color: white !important; }
+#new-task-category, #new-task-date { height: 53px !important; font-weight: bold; }
+
+/* --- 7. タスクリスト（一直線レイアウト） --- */
+#task-list { padding: 0; list-style: none; }
+.task-item {
+    height: 55px !important; margin-bottom: 12px; 
+    border-radius: 12px; border: 1px solid var(--border);
+    background: var(--card); display: flex; align-items: center; 
+    justify-content: space-between; padding: 0 15px !important;
+    box-sizing: border-box !important;
+}
+.task-top-row { display: flex; align-items: center; flex: 1; gap: 15px; overflow: hidden; }
+.task-title { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+.task-category, .task-date { font-weight: bold; font-size: 12px; opacity: 0.7; white-space: nowrap; }
+.edit-btn { 
+    width: auto !important; height: 32px !important; padding: 0 12px !important;
+    font-size: 12px !important; border-radius: 8px !important; 
+    background: #fff !important; color: #000 !important;
+}
+.task-item.completed .task-title, 
+.task-item.completed .task-category, 
+.task-item.completed .task-date { 
+    text-decoration: line-through; opacity: 0.5; 
+}
+
+/* --- 8. モーダル（画面中央固定） --- */
+.modal {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 9999; display: flex; align-items: center; justify-content: center;
+}
+.modal-overlay {
+    position: absolute; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
+}
+.modal-content {
+    position: relative; width: 90%; max-width: 400px;
+    background: var(--bg); padding: 30px; border-radius: 24px;
+    z-index: 10000; border: 1px solid var(--border);
+}
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.modal-delete-link { color: #ff4d4d !important; font-size: 14px; text-decoration: underline; background: none; border: none; font-weight: bold; cursor: pointer; }
+.modal-footer { display: flex; gap: 10px; margin-top: 20px; }
