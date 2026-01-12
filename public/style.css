@@ -44,9 +44,30 @@ header {
     align-items: center;
     margin-bottom: 30px;
 }
-.header-right { display: flex; align-items: center; gap: 10px; }
-.header-right button { width: auto !important; height: 36px !important; font-size: 13px !important; }
+.header-right { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
 
+.header-right button { 
+    /* ★Flexboxを使って中身を中央に集める */
+    display: inline-flex;      
+    align-items: center;      /* 上下中央 */
+    justify-content: center;  /* 左右中央 */
+    gap: 6px;                 /* アイコンと文字の間隔 */
+    
+    padding: 0 12px !important; /* 左右の余白を均等に */
+    width: auto !important; 
+    height: 36px !important; 
+    font-size: 13px !important; 
+    line-height: 1;           /* 余計な行間を消してズレを防止 */
+    
+    border-radius: 10px;      /* 角を少し丸めるとよりモダンになります */
+    background: var(--card);
+    border: 1px solid var(--border);
+    cursor: pointer !important;
+}
 /* --- 4. 統計とプログレスバー --- */
 .progress-container { 
     background: var(--border); 
