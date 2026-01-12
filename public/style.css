@@ -103,6 +103,18 @@ input, select, button {
     /* 右側の余白をアイコンサイズに合わせて調整 */
     padding-right: 60px; 
     font-weight: bold;
+
+    appearance: none;           /* 標準のデザインを一度消す */
+    -webkit-appearance: none;    /* iPhoneでの強制デザインを消す */
+    display: block;             /* 枠をしっかり表示させる */
+    line-height: 53px;          /* 縦方向の文字位置を中央で固定 */
+}
+
+#new-task-date::-webkit-date-and-time-value {
+    margin: 0;
+    height: 53px;
+    line-height: 53px;
+    text-align: left;
 }
 
 /* カレンダーアイコン自体のサイズ調整 */
@@ -139,7 +151,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: auto !important; height: 32px !important; padding: 0 12px !important;
     font-size: 12px !important; border-radius: 8px !important; 
     background: #fff !important; color: #000 !important;
-    transform: translateY(4px);
+    transform: translateY(5px);
 }
 .task-item.completed .task-title, 
 .task-item.completed .task-category, 
