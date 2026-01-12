@@ -305,4 +305,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     gap: 12px;
     margin-top: 25px;
 }
+
+modal-footer button {
+    /* ★Flexboxで文字をど真ん中に固定する */
+    display: flex;
+    align-items: center;      /* 上下中央 */
+    justify-content: center;  /* 左右中央 */
+    
+    line-height: 1;           /* 余計な行間を排除 */
+    padding: 0 !important;    /* 内部余白によるズレを防止 */
+    
+    /* 既存のボタン設定との兼ね合い */
+    cursor: pointer !important;
+}
+
 input[type="checkbox"] { cursor: pointer !important; }
