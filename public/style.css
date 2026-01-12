@@ -180,7 +180,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background: var(--bg); padding: 30px; border-radius: 24px;
     z-index: 10000; border: 1px solid var(--border);
 }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-right: 5px; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-right:0 !important;}
 
 .modal-header h3 {
     margin: 0;
@@ -198,9 +198,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer !important;
     padding: 0 !important;       /* タップエリアを大きくして操作性アップ */
     margin-left: auto;              /* 強制的に右端へ寄せる */
+    margin-right: -15px !important;
     border: none !important;
     line-height: 1;
-    margin: 0 0 0 auto;
     transform: translateY(2px);
 }
 
