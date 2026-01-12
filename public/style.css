@@ -133,7 +133,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: auto !important; height: 32px !important; padding: 0 12px !important;
     font-size: 12px !important; border-radius: 8px !important; 
     background: #fff !important; color: #000 !important;
-    transform: none;
+    transform: translateY(3px);
 }
 .task-item.completed .task-title, 
 .task-item.completed .task-category, 
