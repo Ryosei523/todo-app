@@ -1,21 +1,23 @@
-/* --- 1. テーマ変数 --- */
-
+/* --- 1. プロフェッショナル・ブルー テーマ変数 --- */
 :root {
-    --bg: #f5f7fa;      /* 真っ白ではなく、少し青みのある白 */
+    --bg: #f5f7fa;      
     --text: #1a1c20;
     --card: #ffffff;
     --border: #e1e4e8;
-    --accent: #007aff;  /* 鮮やかなブルー（iOS風） */
+    --accent: #007aff;  
+    --accent-hover: #0056b3; /* ★ホバー用の濃い青を追加 */
 }
 
 [data-theme="dark"] {
-    --bg: #0f172a;       /* 深夜のような深い紺色 */
+    --bg: #0f172a;       
     --text: #f1f5f9;
     --card: #1e293b;
     --border: #334155;
-    --accent: #38bdf8;   /* ダークモードでは少し明るい水色 */
+    --accent: #38bdf8;   
+    --accent-hover: #0ea5e9;
 }
-/* --- 2. 全体設定（ここが幅の決め手です） --- */
+
+/* --- 2. 全体設定 --- */
 body { 
     background-color: var(--bg); 
     color: var(--text); 
@@ -24,16 +26,13 @@ body {
     margin: 0;
 }
 
-/* アプリ内の全てのボタンに手のマークを適用 */
-button {
-    cursor: pointer !important;
-}
+button { cursor: pointer !important; }
 
 .container { 
-    max-width: 480px;      /* PCで見るときの最大幅。ここを小さくするとスリムになります */
-    width: 90%;            /* スマホで見るときの幅 */
-    margin: 40px auto;     /* 画面の中央に配置 */
-    padding: 0;            /* 余計な余白をカット */
+    max-width: 480px; 
+    width: 90%;
+    margin: 40px auto; 
+    padding: 0; 
 }
 
 .hidden { display: none !important; }
@@ -68,189 +67,111 @@ header {
     font-weight: bold; cursor: pointer;
 }
 .tab-btn.active { border: 3px solid #000; background: #f0f0f0; }
-[data-theme="dark"] .tab-btn { background: #222; color: #fff; }
 
 /* --- 6. フォーム（入力エリア） --- */
 input, select, button { 
     width: 100%; height: 55px; 
     margin-bottom: 12px; border-radius: 12px; 
-    border: 1px solid var(--border); background: var(--bg); color: var(--text); 
+    border: 1px solid var(--border); background: var(--card); color: var(--text); 
     box-sizing: border-box !important; font-size: 16px;
 }
+
+/* ★「タスクを追加」ボタンの文字を白く、太く修正 */
 #add-task-btn { 
     background: linear-gradient(135deg, var(--accent), var(--accent-hover)) !important; 
-    color: white !important; 
+    color: #ffffff !important; /* 強制的に白 */
     border: none !important;
     font-weight: bold;
-    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.2); /* ほんのり浮かせる */
+    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.2); 
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-#add-task-btn:active {
-    transform: scale(0.98); /* 押した時に少し凹む演出 */
-}
+#add-task-btn:active { transform: scale(0.98); }
 
-/* --- 2. カテゴリの選択枠（矢印アイコンを大きく調整） --- */
 #new-task-category {
-    appearance: none; 
-    -webkit-appearance: none;
+    appearance: none; -webkit-appearance: none;
     height: 53px !important;
-    box-sizing: border-box !important;
-    
-    /* 矢印のサイズを 20px → 28px に拡大 */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23999'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 15px center; 
-    background-size: 28px 28px; /* サイズアップ */
-    
-    /* アイコンが大きくなった分、文字が重ならないよう右側の余白を増やす */
-    padding-right: 60px; 
-    background-color: var(--bg);
-    font-weight: bold;
+    background-size: 28px 28px;
+    padding-right: 60px;
+    cursor: pointer !important;
 }
 
-/* --- 3. 日付入力枠とカレンダーアイコン（サイズを大きく調整） --- */
 #new-task-date, #edit-task-date {
-height: 53px !important;
-    box-sizing: border-box !important;
+    height: 53px !important;
     position: relative;
-    padding: 0 60px 0 15px; /* 右側にアイコン用の余白 */
-    font-weight: bold;
-    appearance: none;
-    -webkit-appearance: none;
-    display: block;
-    line-height: 53px;
-    background-color: var(--bg);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    /* ★ここを追加：カレンダーアイコンを背景として直接入れる */
+    padding: 0 60px 0 15px;
+    appearance: none; -webkit-appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23999' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 15px center;
     background-size: 24px 24px;
 }
 
-#new-task-date::-webkit-date-and-time-value {
-    margin: 0;
-    height: 53px;
-    line-height: 53px;
-    text-align: left;
+input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0; cursor: pointer; z-index: 2;
 }
 
-/* カレンダーアイコン自体のサイズ調整 */
-input[type="date"]::-webkit-calendar-picker-indicator {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* background: transparent ではなく opacity: 0 を使うのがコツです */
-    opacity: 0; 
-    cursor: pointer;
-    z-index: 2; /* 背景画像より手前に持ってくる */
-}
-/* --- 7. タスクリスト（一直線レイアウト） --- */
+/* --- 7. タスクリスト：レイアウト復旧 --- */
 #task-list { padding: 0; list-style: none; }
+
 .task-item {
-    height: 55px !important; margin-bottom: 12px; 
-    border-radius: 12px; border: 1px solid var(--border);
-    background: var(--card);
+    min-height: 55px; 
+    margin-bottom: 12px; 
+    border-radius: 12px; 
     border: 1px solid var(--border);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* さりげない影 */
+    background: var(--card);
+    display: flex;             /* ★横並びに戻す */
+    align-items: center;       /* ★上下中央揃え */
+    justify-content: space-between; /* ★両端に配置 */
+    padding: 10px 15px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
+
 .task-top-row { 
     display: flex; 
     align-items: center; 
-    gap: 10px;        /* 15pxから8pxにすることで「小空白」になります */
-    flex: none;      /* flex: 1を止めることで、右側へ勝手に広がらなくなります */
+    gap: 10px;        
+    flex: 1;          /* ★左側の要素を広げる */
     overflow: hidden; 
 }
-.task-title { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; max-width: 150px; line-height: 1.2;}
-.task-category, .task-date { font-weight: bold; font-size: 12px; opacity: 0.7; white-space: nowrap; transform: none;line-height: 1; }
+
+.task-title { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+
 .task-category {
-    background: #e0e7ff; /* 非常に薄い青 */
-    color: #4338ca;      /* 濃い青 */
+    background: #e0e7ff; 
+    color: #4338ca;      
     padding: 2px 8px;
     border-radius: 6px;
     font-size: 11px;
-    letter-spacing: 0.5px;
+    white-space: nowrap;
 }
+
+.task-date { font-size: 12px; opacity: 0.7; white-space: nowrap; margin-left: 5px; }
+
+/* ★編集ボタンを右端に固定 */
 .edit-btn { 
     width: auto !important; height: 32px !important; padding: 0 12px !important;
     font-size: 12px !important; border-radius: 8px !important; 
     background: #fff !important; color: #000 !important;
-    transform: translateY(5px);
-}
-.task-item.completed .task-title, 
-.task-item.completed .task-category, 
-.task-item.completed .task-date { 
-    text-decoration: line-through; opacity: 0.5; 
+    flex-shrink: 0; /* ★ボタンが潰れないように固定 */
+    margin-left: 10px;
+    transform: translateY(2px); /* 視覚的バランス調整 */
 }
 
-/* 完了済みタスクの色味 */
-.task-item.completed {
-    background: rgba(255, 255, 255, 0.6);
-    border-color: transparent;
-}
+.task-item.completed { background: rgba(255, 255, 255, 0.6); border-color: transparent; }
+.task-item.completed .task-title, .task-item.completed .task-date { text-decoration: line-through; opacity: 0.5; }
 
-/* --- 8. モーダル（画面中央固定） --- */
-.modal {
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    z-index: 9999; display: flex; align-items: center; justify-content: center;
-}
-.modal-overlay {
-    position: absolute; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
-}
-.modal-content {
-    position: relative; width: 90%; max-width: 400px;
-    background: var(--bg); padding: 30px; border-radius: 24px;
-    z-index: 10000; border: 1px solid var(--border);
-}
-.modal-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 50px;
-    position: relative; /* ★削除ボタンを配置する基準点にする */
-    width: 100%;
-}
-.modal-header h3 {
-    margin: 0;
-    white-space: nowrap;           /* ★文字を絶対に改行させず一列にする */
-    font-size: 20px;               /* タイトルのサイズ調整 */
-    line-height: 1;
-}
+/* --- 8. モーダル --- */
+.modal-header { display: flex; align-items: center; margin-bottom: 50px; position: relative; width: 100%; }
+.modal-header h3 { margin: 0; white-space: nowrap; font-size: 20px; }
 .modal-delete-link {
-    position: absolute;    /* ★親要素の並び順ルールから離脱する */
-    right: -20px;          /* ★右端からの距離（マイナスで壁に突き刺す） */
-    
-    /* 垂直方向をタイトルと完璧に揃える */
-    top: 50%;
-    transform: translateY(-50%); 
-    
-    background: none !important;
-    color: #ff4d4d !important;
-    font-size: 16px !important;
-    text-decoration: none !important;
-    font-weight: bold;
-    cursor: pointer !important;
-    border: none !important;
-    padding: 10px !important; /* タップしやすくする */
-    margin: 0 !important;     /* マージンは不要になるのでリセット */
+    position: absolute; right: -20px; top: 50%; transform: translateY(-50%); 
+    background: none !important; color: #ff4d4d !important; font-size: 16px !important;
+    text-decoration: none !important; font-weight: bold; cursor: pointer !important;
 }
 
-.modal-delete-link:hover {
-    opacity: 0.7;
-}
-.modal-footer { display: flex; gap: 10px; margin-top: 20px; }
-
-#new-task-category {
-    /* 既存の設定の最後に追加 */
-    cursor: pointer !important; /* カテゴリ選択をクリックした時に手にする */
-}
-
-/* 新しく追加してください */
-input[type="checkbox"] {
-    cursor: pointer !important; /* チェックマークにマウスを置いた時に手にする */
-}
+input[type="checkbox"] { cursor: pointer !important; }
