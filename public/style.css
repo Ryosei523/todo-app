@@ -123,17 +123,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .task-top-row { 
     display: flex; 
     align-items: center; 
-    gap: 8px;        /* 15pxから8pxにすることで「小空白」になります */
+    gap: 10px;        /* 15pxから8pxにすることで「小空白」になります */
     flex: none;      /* flex: 1を止めることで、右側へ勝手に広がらなくなります */
     overflow: hidden; 
 }
-.task-title { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; max-width: 150px;}
-.task-category, .task-date { font-weight: bold; font-size: 12px; opacity: 0.7; white-space: nowrap; transform: translateY(2px); }
+.task-title { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; max-width: 150px; line-height: 1.2;}
+.task-category, .task-date { font-weight: bold; font-size: 12px; opacity: 0.7; white-space: nowrap; transform: none;line-height: 1; }
 .edit-btn { 
     width: auto !important; height: 32px !important; padding: 0 12px !important;
     font-size: 12px !important; border-radius: 8px !important; 
     background: #fff !important; color: #000 !important;
-    transform: translateY(2px);
+    transform: none;
 }
 .task-item.completed .task-title, 
 .task-item.completed .task-category, 
