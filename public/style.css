@@ -178,60 +178,80 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .task-item.completed { background: rgba(255, 255, 255, 0.6); border-color: transparent; }
 .task-item.completed .task-title, .task-item.completed .task-date { text-decoration: line-through; opacity: 0.5; }
 
-/* --- 8. モーダル：画面中央に復活させる --- */
+/* --- 8. モーダル：タイトル復活とアイコン調整 --- */
 
 .modal {
-    position: fixed;      /* ★画面の決まった位置に固定する */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;        /* ★一番手前に表示させる */
-    display: flex;        /* 中身を中央に寄せるための設定 */
-    align-items: center;  /* 上下中央 */
-    justify-content: center; /* 左右中央 */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-overlay {
-    position: absolute;   /* モーダル枠内いっぱいに広げる */
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* 背景を暗くする */
-    backdrop-filter: blur(4px);    /* 背景をぼかすとおしゃれになります */
+    position: absolute;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
 }
 
 .modal-content {
     position: relative;
     width: 90%;
     max-width: 400px;
-    background: var(--card); /* テーマに合わせた背景色 */
+    background: var(--card);
     padding: 30px;
     border-radius: 24px;
-    z-index: 10000;         /* オーバーレイより手前に */
+    z-index: 10000;
     border: 1px solid var(--border);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); /* 浮いている感じを出す影 */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
-/* ヘッダーとボタンの配置（右隅固定） */
+/* ヘッダー：タイトルと削除ボタンの並びを整理 */
 .modal-header {
     display: flex;
     align-items: center;
+    justify-content: flex-start; /* タイトルを左に寄せる */
     margin-bottom: 30px;
-    position: relative;
+    position: relative;          /* 削除ボタンの基準点 */
     width: 100%;
+    min-height: 30px;
 }
 
-.modal-header h3 { margin: 0; font-size: 20px; font-weight: bold; }
+.modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text);          /* ★色を確実に表示させる */
+    white-space: nowrap;
+}
 
+/* 削除ボタンを右隅ギリギリに配置 */
 .modal-delete-link {
-    position: absolute;
-    right: -10px; /* 右端に寄せる */
+    position: absolute !important;
+    right: -10px !important;    /* 右隅へ配置 */
     top: 50%;
     transform: translateY(-50%);
     color: #ff4d4d !important;
     font-size: 15px !important;
     text-decoration: none !important;
     font-weight: bold;
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+
+/* ★モーダル内のカテゴリ選択アイコンを大きく調整 */
+.modal-content select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23999'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 15px center !important;
+    background-size: 28px 28px !important; /* ★サイズを28pxに拡大 */
+    padding-right: 50px !important;
     cursor: pointer !important;
 }
 
