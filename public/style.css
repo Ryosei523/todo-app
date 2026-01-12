@@ -70,8 +70,47 @@ input, select, button {
     box-sizing: border-box !important; font-size: 16px;
 }
 #add-task-btn { background: #0056b3 !important; color: white !important; }
-#new-task-category, #new-task-date { height: 53px !important; font-weight: bold; }
+/* --- 2. カテゴリの選択枠（矢印アイコンを大きく調整） --- */
+#new-task-category {
+    appearance: none; 
+    -webkit-appearance: none;
+    height: 53px !important;
+    box-sizing: border-box !important;
+    
+    /* 矢印のサイズを 20px → 28px に拡大 */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23999'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center; 
+    background-size: 28px 28px; /* サイズアップ */
+    
+    /* アイコンが大きくなった分、文字が重ならないよう右側の余白を増やす */
+    padding-right: 60px; 
+    background-color: var(--bg);
+    font-weight: bold;
+}
 
+/* --- 3. 日付入力枠とカレンダーアイコン（サイズを大きく調整） --- */
+#new-task-date {
+    height: 53px !important;
+    box-sizing: border-box !important;
+    position: relative;
+    /* 右側の余白をアイコンサイズに合わせて調整 */
+    padding-right: 60px; 
+    font-weight: bold;
+}
+
+/* カレンダーアイコン自体のサイズ調整 */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: block;
+    width: 28px;  /* 20px → 28px に拡大 */
+    height: 28px; /* 20px → 28px に拡大 */
+    cursor: pointer;
+    opacity: 0.6;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
 /* --- 7. タスクリスト（一直線レイアウト） --- */
 #task-list { padding: 0; list-style: none; }
 .task-item {
