@@ -314,6 +314,8 @@ modal-footer button {
     
     line-height: 1;           /* 余計な行間を排除 */
     padding: 0 !important;    /* 内部余白によるズレを防止 */
+
+    padding-top: 2px !important;
     
     /* 既存のボタン設定との兼ね合い */
     cursor: pointer !important;
