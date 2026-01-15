@@ -189,6 +189,21 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
+/* 未完了かつ期限が過ぎている場合 */
+.task-item.is-overdue .task-date {
+    color: #ff4d4d !important;    /* 警告の赤 */
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* 期限切れアイコンを出す場合（オプション） */
+.task-item.is-overdue .task-date::before {
+    content: "⚠️";               /* アイコンを文字として追加 */
+    font-size: 14px;
+}
+
 .task-top-row { 
     display: flex; 
     align-items: center; 
