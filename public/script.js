@@ -142,6 +142,10 @@ function renderTasks(tasks) {
     taskList.innerHTML = '';
 
     filteredTasks.forEach(task => {
+        const taskDate = new Date(task.due_date);
+        taskDate.setHours(0, 0, 0, 0); // 時間をリセットして日付のみで比較
+        const isOverdue = task.status !== 'completed' && taskDate < today;
+
         const dateStr = task.due_date ? new Date(task.due_date).toLocaleDateString() : '';
         const taskData = JSON.stringify(task).replace(/"/g, '&quot;'); 
         
