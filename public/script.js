@@ -115,20 +115,6 @@ function renderTasks(tasks) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    tasks.forEach(task => {
-        // タスクの日付をDateオブジェクトに変換
-        const taskDate = new Date(task.date);
-        
-        // 条件：未完了 かつ 期限が今日より前
-        const isOverdue = !task.completed && taskDate < today;
-
-        // HTMLを生成する際に、isOverdueがtrueならクラスを付与する
-        const taskItemHtml = `
-            <div class="task-item ${task.completed ? 'completed' : ''} ${isOverdue ? 'is-overdue' : ''}">
-                </div>
-        `;
-        // ...
-    });
 
     // --- 2. フィルターに基づいて表示するタスクを絞り込む ---
     const filteredTasks = tasks.filter(task => {
