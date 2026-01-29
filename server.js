@@ -31,12 +31,10 @@ const db = mysql.createConnection({
     ssl: { rejectUnauthorized: false } 
 });
 
-// --- データベース初期化（カラムの自動追加） ---
 db.connect(err => {
     if (err) return console.error('DB接続失敗:', err);
     console.log('DB接続成功');
 
-    // 並び順用のposition列を追加
     db.query("SHOW COLUMNS FROM tasks LIKE 'position'", (err, results) => {
         if (!err && results.length === 0) {
             db.query("ALTER TABLE tasks ADD COLUMN position INT DEFAULT 0");
@@ -44,7 +42,6 @@ db.connect(err => {
         }
     });
 
-    // 固定カテゴリ保存用のcategory列（文字列）を追加
     db.query("SHOW COLUMNS FROM tasks LIKE 'category'", (err, results) => {
         if (!err && results.length === 0) {
             db.query("ALTER TABLE tasks ADD COLUMN category VARCHAR(50)");
@@ -53,7 +50,6 @@ db.connect(err => {
     });
 });
 
-// --- 認証 API ---
 app.post('/api/register', async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -87,9 +83,6 @@ app.get('/api/user', (req, res) => {
     res.json(req.session.userId ? { loggedIn: true, username: req.session.username } : { loggedIn: false });
 });
 
-// --- タスク API (シンプル版) ---
-
-// 並び順を考慮した取得
 app.get('/api/tasks', (req, res) => {
     if (!req.session.userId) return res.status(401).json({ message: '未ログイン' });
     const sql = 'SELECT * FROM tasks WHERE user_id = ? ORDER BY position ASC';
@@ -99,12 +92,10 @@ app.get('/api/tasks', (req, res) => {
     });
 });
 
-// タスク追加（positionを最後尾に設定）
 app.post('/api/tasks', (req, res) => {
     const { title, due_date, category } = req.body; 
     if (!req.session.userId) return res.status(401).json({ message: '未ログイン' });
     
-    // 現在の最大positionを取得して+1する
     db.query('SELECT MAX(position) as maxPos FROM tasks WHERE user_id = ?', [req.session.userId], (err, results) => {
         const nextPos = (results[0].maxPos || 0) + 1;
         const sql = 'INSERT INTO tasks (user_id, title, due_date, category, position) VALUES (?, ?, ?, ?, ?)';
@@ -115,12 +106,10 @@ app.post('/api/tasks', (req, res) => {
     });
 });
 
-// 並び順の保存（ドラッグ＆ドロップ用）
 app.patch('/api/tasks/reorder', (req, res) => {
-    const { ids } = req.body; // フロントから届いたIDの配列
+    const { ids } = req.body; 
     if (!req.session.userId || !Array.isArray(ids)) return res.status(400).json({ success: false });
 
-    // 各タスクのpositionを配列のインデックス順に更新
     let completed = 0;
     ids.forEach((id, index) => {
         db.query('UPDATE tasks SET position = ? WHERE task_id = ? AND user_id = ?', [index, id, req.session.userId], (err) => {

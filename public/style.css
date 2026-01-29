@@ -1,11 +1,10 @@
-/* --- 1. プロフェッショナル・ブルー テーマ変数 --- */
 :root {
     --bg: #f5f7fa;      
     --text: #1a1c20;
     --card: #ffffff;
     --border: #e1e4e8;
     --accent: #007aff;  
-    --accent-hover: #0056b3; /* ★ホバー用の濃い青を追加 */
+    --accent-hover: #0056b3;
 }
 
 [data-theme="dark"] {
@@ -17,7 +16,6 @@
     --accent-hover: #0ea5e9;
 }
 
-/* --- 2. 全体設定 --- */
 body { 
     background-color: var(--bg); 
     color: var(--text); 
@@ -37,7 +35,6 @@ button { cursor: pointer !important; }
 
 .hidden { display: none !important; }
 
-/* --- 3. ヘッダー --- */
 header {
     display: flex;
     justify-content: space-between;
@@ -51,24 +48,22 @@ header {
 }
 
 .header-right button { 
-    /* ★Flexboxを使って中身を中央に集める */
     display: inline-flex;      
-    align-items: center;      /* 上下中央 */
-    justify-content: center;  /* 左右中央 */
-    gap: 6px;                 /* アイコンと文字の間隔 */
+    align-items: center;      
+    justify-content: center;  
+    gap: 6px;                 
     
-    padding: 0 12px !important; /* 左右の余白を均等に */
+    padding: 0 12px !important; 
     width: auto !important; 
     height: 36px !important; 
     font-size: 13px !important; 
-    line-height: 1;           /* 余計な行間を消してズレを防止 */
+    line-height: 1;          
     
-    border-radius: 10px;      /* 角を少し丸めるとよりモダンになります */
+    border-radius: 10px;      
     background: var(--card);
     border: 1px solid var(--border);
     cursor: pointer !important;
 }
-/* --- 4. 統計とプログレスバー --- */
 .progress-container { 
     background: var(--border); 
     height: 12px; border-radius: 6px; 
@@ -79,7 +74,6 @@ header {
     height: 100%; width: 0%; 
     transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-/* --- 5. フィルタータブ：文字をど真ん中に配置 --- */
 
 .filter-tabs { 
     display: flex; 
@@ -97,15 +91,13 @@ header {
     font-weight: bold; 
     cursor: pointer;
 
-    /* ★ここを追加：中身を上下左右中央に集める */
     display: flex;            
-    align-items: center;      /* 上下中央 */
-    justify-content: center;  /* 左右中央 */
-    line-height: 1;           /* 行間の余白をリセット */
-    padding: 0 !important;    /* 意図しない余白を消去 */
+    align-items: center;      
+    justify-content: center;  
+    line-height: 1;           
+    padding: 0 !important;   
 }
 
-/* アクティブ時の枠線を少し太くして強調 */
 .tab-btn.active { 
     border: 3px solid #000; 
     background: #f0f0f0; 
@@ -113,7 +105,6 @@ header {
 
 [data-theme="dark"] .tab-btn { background: #222; color: #fff; }
 [data-theme="dark"] .tab-btn.active { border-color: var(--accent); }
-/* --- 6. フォーム（入力エリア） --- */
 input, select, button { 
     width: 100%; 
     height: 55px; 
@@ -122,14 +113,13 @@ input, select, button {
     border: 1px solid var(--border); 
     background: var(--card); 
     color: var(--text); 
-    box-sizing: border-box !important; /* 枠の太さを幅に含める */
+    box-sizing: border-box !important; 
     font-size: 16px;
-    padding-left: 15px;               /* ★全てのテキスト開始位置を15pxで統一 */
+    padding-left: 15px;              
 }
-/* ★「タスクを追加」ボタンの文字を白く、太く修正 */
 #add-task-btn { 
     background: linear-gradient(135deg, var(--accent), var(--accent-hover)) !important; 
-    color: #ffffff !important; /* 強制的に白 */
+    color: #ffffff !important; 
     border: none !important;
     font-weight: bold;
     box-shadow: 0 4px 15px rgba(0, 122, 255, 0.2); 
@@ -142,8 +132,8 @@ input, select, button {
     appearance: none; 
     -webkit-appearance: none;
     height: 53px !important;
-    padding-left: 15px;               /* 左を15pxに固定 */
-    padding-right: 60px;              /* 右のアイコン用余白 */
+    padding-left: 15px;              
+    padding-right: 60px;              
     
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23999'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -155,7 +145,6 @@ input, select, button {
 #new-task-date, #edit-task-date {
     height: 53px !important;
     position: relative;
-    /* 上下の余白を0、右を60px、左を15pxで統一 */
     padding: 0 60px 0 15px !important; 
     
     appearance: none; 
@@ -173,7 +162,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     opacity: 0; cursor: pointer; z-index: 2;
 }
 
-/* --- 7. タスクリスト：レイアウト復旧 --- */
 #task-list { padding: 0; list-style: none; }
 
 .task-item {
@@ -182,25 +170,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border-radius: 12px; 
     border: 1px solid var(--border);
     background: var(--card);
-    display: flex;             /* ★横並びに戻す */
-    align-items: center;       /* ★上下中央揃え */
-    justify-content: space-between; /* ★両端に配置 */
+    display: flex;             
+    align-items: center;       
+    justify-content: space-between; 
     padding: 10px 15px !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-/* 未完了かつ期限が過ぎている場合 */
 .task-item.is-overdue .task-date {
-    color: #ff4d4d !important;    /* 警告の赤 */
+    color: #ff4d4d !important;    
     font-weight: bold;
     display: flex;
     align-items: center;
     gap: 4px;
 }
 
-/* 期限切れアイコンを出す場合（オプション） */
 .task-item.is-overdue .task-date::before {
-    content: "⚠️";               /* アイコンを文字として追加 */
+    content: "⚠️";               
     font-size: 14px;
 }
 
@@ -208,7 +194,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: flex; 
     align-items: center; 
     gap: 10px;        
-    flex: 1;          /* ★左側の要素を広げる */
+    flex: 1;          
     overflow: hidden; 
 }
 
@@ -225,20 +211,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .task-date { font-size: 12px; opacity: 0.7; white-space: nowrap; margin-left: 5px; }
 
-/* ★編集ボタンを右端に固定 */
 .edit-btn { 
     width: auto !important; height: 32px !important; padding: 0 12px !important;
     font-size: 12px !important; border-radius: 8px !important; 
     background: #fff !important; color: #000 !important;
-    flex-shrink: 0; /* ★ボタンが潰れないように固定 */
+    flex-shrink: 0; 
     margin-left: 10px;
-    transform: translateY(2px); /* 視覚的バランス調整 */
+    transform: translateY(2px); 
 }
 
 .task-item.completed { background: rgba(255, 255, 255, 0.6); border-color: transparent; }
 .task-item.completed .task-title, .task-item.completed .task-date { text-decoration: line-through; opacity: 0.5; }
 
-/* --- 8. モーダル：タイトル復活とアイコン調整 --- */
 
 .modal {
     position: fixed;
@@ -269,13 +253,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
-/* ヘッダー：タイトルと削除ボタンの並びを整理 */
 .modal-header {
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* タイトルを左に寄せる */
+    justify-content: flex-start; 
     margin-bottom: 30px;
-    position: relative;          /* 削除ボタンの基準点 */
+    position: relative;         
     width: 100%;
     min-height: 30px;
 }
@@ -284,14 +267,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     margin: 0;
     font-size: 20px;
     font-weight: bold;
-    color: var(--text);          /* ★色を確実に表示させる */
+    color: var(--text);         
     white-space: nowrap;
 }
 
-/* 削除ボタンを右隅ギリギリに配置 */
 .modal-delete-link {
     position: absolute !important;
-    right: -10px !important;    /* 右隅へ配置 */
+    right: -10px !important;   
     top: 50%;
     transform: translateY(-50%);
     color: #ff4d4d !important;
@@ -303,14 +285,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer !important;
 }
 
-/* ★モーダル内のカテゴリ選択アイコンを大きく調整 */
 .modal-content select {
     appearance: none;
     -webkit-appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23999'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") !important;
     background-repeat: no-repeat !important;
     background-position: right 15px center !important;
-    background-size: 28px 28px !important; /* ★サイズを28pxに拡大 */
+    background-size: 28px 28px !important;
     padding-right: 50px !important;
     cursor: pointer !important;
 }
@@ -322,17 +303,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 modal-footer button {
-    /* ★Flexboxで文字をど真ん中に固定する */
     display: flex;
-    align-items: center;      /* 上下中央 */
-    justify-content: center;  /* 左右中央 */
-    
-    line-height: 1;           /* 余計な行間を排除 */
-    padding: 0 !important;    /* 内部余白によるズレを防止 */
+    align-items: center;      
+    justify-content: center;  
+    line-height: 1;          
+    padding: 0 !important;    
 
     padding-top: 2px !important;
     
-    /* 既存のボタン設定との兼ね合い */
     cursor: pointer !important;
 }
 

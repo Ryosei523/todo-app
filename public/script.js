@@ -1,6 +1,5 @@
-// --- 初期設定と画面切り替え ---
-let currentFilter = 'all'; // 現在のフィルター状態
-let currentTasks = [];    // 取得した全タスクを保持する変数
+let currentFilter = 'all'; 
+let currentTasks = [];    
 const authScreen = document.getElementById('auth-screen');
 const appScreen = document.getElementById('app-screen');
 const taskList = document.getElementById('task-list');
@@ -17,20 +16,17 @@ function showAuth() {
     appScreen.classList.add('hidden');
 }
 
-// --- フィルターボタンの処理を追加 ---
 window.setFilter = (filter) => {
     currentFilter = filter;
     
-    // ボタンの見た目（activeクラス）を切り替え
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     if (filter === 'all') document.getElementById('filter-all').classList.add('active');
     if (filter === 'pending') document.getElementById('filter-pending').classList.add('active');
     if (filter === 'completed') document.getElementById('filter-completed').classList.add('active');
 
-    renderTasks(currentTasks); // 再描画
+    renderTasks(currentTasks); 
 };
 
-// --- ドラッグ＆ドロップ設定 ---
 new Sortable(taskList, {
     animation: 150,
     ghostClass: 'sortable-ghost',
@@ -44,14 +40,12 @@ new Sortable(taskList, {
     }
 });
 
-// --- テーマ切り替え ---
 document.getElementById('theme-toggle').addEventListener('click', () => {
     const body = document.body;
     const isDark = body.getAttribute('data-theme') === 'dark';
     body.setAttribute('data-theme', isDark ? 'light' : 'dark');
 });
 
-// --- 認証処理 ---
 async function checkLogin() {
     const res = await fetch('/api/user');
     const data = await res.json();
@@ -89,15 +83,13 @@ document.getElementById('logout-btn').addEventListener('click', async () => {
     showAuth();
 });
 
-// --- タスク操作 ---
 async function fetchTasks() {
     const res = await fetch('/api/tasks');
-    currentTasks = await res.json(); // 全データを一旦保持
+    currentTasks = await res.json(); 
     renderTasks(currentTasks);
 }
 
 function renderTasks(tasks) {
-    // --- 1. カウントとゲージの更新（常に全件を元に計算） ---
     const total = tasks.length;
     const completedCount = tasks.filter(t => t.status === 'completed').length;
     
@@ -111,25 +103,22 @@ function renderTasks(tasks) {
         progressFill.style.width = (total > 0 ? (completedCount / total) * 100 : 0) + '%';
     }
 
-    // 今日の日付を取得（時間を00:00:00にリセットして純粋に日付だけで比較する）
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
 
-    // --- 2. フィルターに基づいて表示するタスクを絞り込む ---
     const filteredTasks = tasks.filter(task => {
         if (currentFilter === 'pending') return task.status === 'pending';
         if (currentFilter === 'completed') return task.status === 'completed';
         return true;
     });
 
-    // --- 3. リストの描画 ---
     const taskList = document.getElementById('task-list');
     taskList.innerHTML = '';
 
     filteredTasks.forEach(task => {
         const taskDate = new Date(task.due_date);
-        taskDate.setHours(0, 0, 0, 0); // 時間をリセットして日付のみで比較
+        taskDate.setHours(0, 0, 0, 0); 
         const isOverdue = task.status !== 'completed' && taskDate < today;
 
         const dateStr = task.due_date ? new Date(task.due_date).toLocaleDateString() : '';
@@ -156,7 +145,6 @@ function renderTasks(tasks) {
     });
 }
 
-// タスク追加
 document.getElementById('add-task-btn').addEventListener('click', async () => {
     const title = document.getElementById('new-task-title').value;
     const date = document.getElementById('new-task-date').value;
@@ -187,7 +175,6 @@ window.toggleTask = async (id, isChecked) => {
     fetchTasks();
 };
 
-// モーダル表示
 window.openEditModal = (task) => {
     document.getElementById('edit-task-id').value = task.task_id;
     document.getElementById('edit-task-title').value = task.title;
@@ -198,7 +185,6 @@ window.openEditModal = (task) => {
 
 window.closeModal = () => document.getElementById('edit-modal').classList.add('hidden');
 
-// モーダル内：保存処理
 document.getElementById('save-edit-btn').addEventListener('click', async () => {
     const id = document.getElementById('edit-task-id').value;
     const title = document.getElementById('edit-task-title').value;
@@ -213,7 +199,6 @@ document.getElementById('save-edit-btn').addEventListener('click', async () => {
     fetchTasks();
 });
 
-// モーダル内：削除処理
 document.getElementById('modal-delete-btn').onclick = async () => {
     const id = document.getElementById('edit-task-id').value;
     if (!confirm('このタスクを完全に削除しますか？')) return;
