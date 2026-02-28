@@ -4,7 +4,6 @@
 [https://todo-app-gjnm.onrender.com](https://todo-app-gjnm.onrender.com)
 
 ## 🎥 動作イメージ
-
 ### 🔐 ログイン・新規登録
 ![ログインデモ](images/demo-login.gif)
 
