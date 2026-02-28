@@ -116,18 +116,14 @@ app.post('/api/tasks', (req, res) => {
     });
 });
 
-// 並び替え処理：トランザクション版
 app.patch('/api/tasks/reorder', async (req, res) => {
     const { ids } = req.body;
     if (!req.session.userId || !Array.isArray(ids)) return res.status(400).json({ success: false });
 
-    // トランザクション開始
     db.beginTransaction(async (err) => {
         if (err) return res.status(500).json({ error: "トランザクション開始失敗" });
 
         try {
-            // 各タスクの順序を1つずつ更新
-            // ※Promise.allを使って並列実行し、すべて終わるのを待つ
             const promises = ids.map((id, index) => {
                 return new Promise((resolve, reject) => {
                     db.query(
@@ -143,7 +139,6 @@ app.patch('/api/tasks/reorder', async (req, res) => {
 
             await Promise.all(promises);
 
-            // すべて成功したら確定（コミット）
             db.commit((err) => {
                 if (err) {
                     return db.rollback(() => {
@@ -154,7 +149,6 @@ app.patch('/api/tasks/reorder', async (req, res) => {
             });
 
         } catch (error) {
-            // 一つでも失敗したらすべて無効にする（ロールバック）
             db.rollback(() => {
                 console.error("並べ替え中にエラー発生、ロールバックしました:", error);
                 res.status(500).json({ error: "整合性保護のため処理を中断しました" });
